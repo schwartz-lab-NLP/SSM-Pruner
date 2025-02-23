@@ -28,3 +28,4 @@ dependencies:
       - transformers==4.48.1
       - trl==0.13.0
       - tzdata==2024.1
+      - mamba-ssm

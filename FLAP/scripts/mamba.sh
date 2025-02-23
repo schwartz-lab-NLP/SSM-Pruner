@@ -1,7 +1,7 @@
 #!/bin/bash
 
-model="state-spaces/mamba2-2.7b"
-#model="tGhattas/Smol2-Mamba-1.9B"
+#model="state-spaces/mamba2-2.7b"
+model="tGhattas/Smol2-Mamba-1.9B"
 #model="goombalab/Phi-Mamba"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
 

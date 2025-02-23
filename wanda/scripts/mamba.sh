@@ -2,12 +2,10 @@
 
 # Set common variables
 #model="goombalab/Phi-Mamba"
-model="state-spaces/mamba2-2.7b"
-#model="./phi_mamba/tGhattas/Smol2-Mamba-1.9B" #19
-
+#model="state-spaces/mamba2-2.7b"
+model="./phi_mamba/tGhattas/Smol2-Mamba-1.9B"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
-#model="JunxiongWang/Mamba2InLlama_1"
-#sparsity_ratio=0.5 #0.3, 0.5
+
 cuda_device=0
 
 # Set CUDA device visibility
@@ -51,8 +49,8 @@ run_python_command () {
 #echo "--------------------------------------------------------------------------------------"
 #echo "--------------------------------------------------------------------------------------"
 #run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/phi_05" "out/mamba/unstructured/wanda/phi_05/model/" 0.5
-#run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_025" "out/mamba/unstructured/wanda/SMOL19_025/model/" 0.25
-#run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_08" "out/mamba/unstructured/wanda/SMOL19_08/model/" 0.8
+
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_025" "out/mamba/unstructured/wanda/SMOL19_05/model/" 0.5
 
 
 
@@ -68,7 +66,7 @@ run_python_command () {
 #echo "--------------------------------------------------------------------------------------"
 #echo "--------------------------------------------------------------------------------------"
 #echo "--------------------------------------------------------------------------------------"
-run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/mamba2_05" "out/mamba/unstructured/wanda/mamba2_05/model/" 0.5
+#run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/mamba2_05" "out/mamba/unstructured/wanda/mamba2_05/model/" 0.5
 
 
 #run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/mLlama_0" "out/mamba/unstructured/wanda/mLlama_0/model/" 0
@@ -88,19 +86,4 @@ run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/mamba2_0
 
 
 
-#run_python_command "wanda" "2:4" "out/mamba/2-4/wanda/" "out/mamba/2-4/wanda/model/"
-#run_python_command "wanda" "4:8" "out/mamba/4-8/wanda/" "out/mamba/4-8/wanda/model/"
 echo "Finished wanda pruning method"
-# wikitext perplexity 29.44671630859375
-# wikitext perplexity 45.57360076904297
-# wikitext perplexity 35.61686325073242
-
-
-#echo "Running with sparsegpt pruning method"
-#run_python_command "sparsegpt" "unstructured" "out/mamba/unstructured/sparsegpt/" "out/mamba/unstructured/sparsegpt/model/"
-#run_python_command "sparsegpt" "2:4" "out/mamba/2-4/sparsegpt/" "out/mamba/2-4/sparsegpt/model/"
-#run_python_command "sparsegpt" "4:8" "out/mamba/4-8/sparsegpt/" "out/mamba/4-8/sparsegpt/model/"
-#echo "Finished sparsegpt pruning method"
-
-
-# 2:4 -  wikitext perplexity 34.88787078857422

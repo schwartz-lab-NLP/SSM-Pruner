@@ -1,4 +1,4 @@
-name: ssm_pruner
+name: ssm__pruner
 channels:
   - conda-forge
   - defaults

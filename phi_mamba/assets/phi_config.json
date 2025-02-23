@@ -1,0 +1,26 @@
+{
+    "LanguageModel": {
+        "input": {
+            "vocab_size": 51200,
+            "pad_vocab_size_multiple": 8
+        }
+    },
+    "MixerModel": {
+        "input": {
+            "d_model": 2048,
+            "n_layer": 24,
+            "lm_head_prenorm": "layer"
+        }
+    },
+    "Block1": {
+        "n_layers":24,
+        "BlockType":"modules.phi_block",
+        "block_input":{
+          "resid_dropout":0.0
+        },
+        "CoreType":"modules.mixers.phi_attention",
+        "core_input":{
+
+       }
+    }
+}

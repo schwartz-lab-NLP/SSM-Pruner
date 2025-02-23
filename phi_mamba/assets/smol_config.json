@@ -1,0 +1,59 @@
+{
+    "LanguageModel": {
+        "input": {
+            "vocab_size": 49152,
+            "pad_vocab_size_multiple": 8,
+            "tie_word_embeddings": true,
+            "lm_head_bias": false
+        }
+    },
+    "MixerModel": {
+        "input": {
+            "d_model": 960,
+            "n_layer": 32,
+            "lm_head_prenorm": "layer",
+            "rotary_emb": true,
+            "rotary_emb_config": {
+                "max_position_embeddings": 8192,
+                "rope_scaling": null,
+                "rope_theta": 100000,
+                "rope_interleaved": false,
+                "head_dim": 64
+            }
+        }
+    },
+    "Block1": {
+        "n_layers":32,
+        "BlockType":"modules.llama_block",
+        "block_input":{
+            "resid_dropout":0.0,
+            "rms_norm_eps": 1e-05
+        },
+        "mlp": {
+            "intermediate_size": 2560
+        },
+        "CoreType":"modules.mixers.llama_attention",
+        "core_input":{
+          "attention_bias": false,
+          "attention_dropout": 0.0,
+          "bos_token_id": 0,
+          "eos_token_id": 0,
+          "hidden_act": "silu",
+          "hidden_size": 960,
+          "initializer_range": 0.02,
+          "intermediate_size": 2560,
+          "max_position_embeddings": 2048,
+          "mlp_bias": false,
+          "model_type": "llama",
+          "num_attention_heads": 15,
+          "num_hidden_layers": 32,
+          "num_key_value_heads": 5,
+          "pretraining_tp": 1,
+          "rms_norm_eps": 1e-05,
+          "rope_scaling": null,
+          "rope_theta": 10000.0,
+          "use_cache": true,
+          "vocab_size": 49152
+       }
+    }
+}

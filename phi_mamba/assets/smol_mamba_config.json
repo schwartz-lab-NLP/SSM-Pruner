@@ -1,0 +1,41 @@
+{
+    "LanguageModel": {
+        "input": {
+            "vocab_size": 49152,
+            "pad_vocab_size_multiple": 8,
+            "tie_word_embeddings": true,
+            "lm_head_bias": false
+        }
+    },
+    "MixerModel": {
+        "input": {
+            "d_model": 960,
+            "n_layer": 32,
+            "lm_head_prenorm": "rms",
+            "rms_norm_eps": 1e-05
+        }
+    },
+    "Block1": {
+        "n_layers": 32,
+        "BlockType": "modules.llama_block",
+        "block_input": {
+            "resid_dropout": 0.0,
+            "rms_norm_eps": 1e-05
+        },
+        "mlp": {
+            "intermediate_size": 2560
+        },
+        "CoreType": "modules.mixers.discrete_mamba2",
+        "core_input": {
+            "d_state": 64,
+            "n_v_heads": 15,
+            "n_qk_heads": 15,
+            "d_conv": 3,
+            "conv_bias": true,
+            "expand": 1,
+            "chunk_size": 128,
+            "activation": "identity",
+            "bias": false
+        }
+    }
+}

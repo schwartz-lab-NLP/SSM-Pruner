@@ -1,0 +1,59 @@
+{
+    "LanguageModel":{
+       "type":"LayeredMambaLM",
+       "input":{
+          "vocab_size":51200,
+          "pad_vocab_size_multiple":8
+       }
+    },
+    "MixerModel":{
+       "type":"LayerMixerModel",
+       "input":{
+          "d_model":2048,
+          "n_layer":24,
+          "lm_head_prenorm":"layer"
+       }
+    },
+    "Block1":{
+       "n_layers":8,
+       "BlockType":"modules.phi_block",
+       "block_input":{
+          "resid_dropout":0.0
+       },
+       "CoreType":"modules.mixers.phi_attention",
+       "core_input":{
+            "inner_hidden_size": 1472,
+            "num_key_value_heads": 23,
+            "num_attention_heads": 23
+         }
+    },
+    "Block2":{
+       "n_layers": 8,
+        "BlockType":"modules.phi_block",
+        "block_input":{
+            "resid_dropout":0.0
+        },
+        "mlp": {
+            "intermediate_size": 5734
+        },
+        "CoreType":"modules.mixers.phi_attention",
+         "core_input":{
+            "inner_hidden_size": 1472,
+            "num_key_value_heads": 23,
+            "num_attention_heads": 23
+         }
+    },
+    "Block3":{
+        "n_layers":8,
+        "BlockType":"modules.phi_block",
+        "block_input":{
+            "resid_dropout":0.0
+        },
+        "CoreType":"modules.mixers.phi_attention",
+        "core_input":{
+            "inner_hidden_size": 1472,
+            "num_key_value_heads": 23,
+            "num_attention_heads": 23
+        }
+    }
+ }

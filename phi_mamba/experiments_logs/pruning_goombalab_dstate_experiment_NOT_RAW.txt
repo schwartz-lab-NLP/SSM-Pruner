@@ -1,0 +1,407 @@
+torch 2.4.1
+transformers 4.48.1
+accelerate 0.34.2
+# of gpus:  1
+evaluate baseline
+wikitext-2-v1. Loss: 3.0332796573638916
+wikitext-2-v1 Perplexity: 20.765222549438477
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.0618929862976074
+wikitext-2-v1 Perplexity: 21.367969512939453
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.1822359561920166
+wikitext-2-v1 Perplexity: 24.100582122802734
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.5184078216552734
+wikitext-2-v1 Perplexity: 33.730682373046875
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.0600831508636475
+wikitext-2-v1 Perplexity: 21.329330444335938
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.1797430515289307
+wikitext-2-v1 Perplexity: 24.04057502746582
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.509495258331299
+wikitext-2-v1 Perplexity: 33.43138885498047
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: magnitude, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: magnitude, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 4.7701263427734375
+wikitext-2-v1 Perplexity: 117.93414306640625
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: magnitude, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 5.739743709564209
+wikitext-2-v1 Perplexity: 310.9847106933594
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: magnitude, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 6.541593551635742
+wikitext-2-v1 Perplexity: 693.3906860351562
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: random, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: random, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.115618944168091
+wikitext-2-v1 Perplexity: 22.547382354736328
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: random, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.4699835777282715
+wikitext-2-v1 Perplexity: 32.13621520996094
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: random, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 4.5992608070373535
+wikitext-2-v1 Perplexity: 99.41080474853516
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: mean_pooling, ratio: 0
+Memory footprint: 2901.26 MB
+integer division or modulo by zero
+============================================================================================================================================================================================================================================================================================================
+Pruning method: mean_pooling, ratio: 0.25
+Memory footprint: 2901.26 MB
+The expanded size of the tensor (1536) must match the existing size (512) at non-singleton dimension 0.  Target sizes: [1536, 2048].  Tensor sizes: [512, 2048]
+============================================================================================================================================================================================================================================================================================================
+Pruning method: mean_pooling, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 4.914153575897217
+wikitext-2-v1 Perplexity: 136.2039794921875
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: mean_pooling, ratio: 0.75
+Memory footprint: 2901.26 MB
+d_state must be divisible by num_to_prune - 64 % 48 != 0
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_B, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_B, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.0638444423675537
+wikitext-2-v1 Perplexity: 21.40970802307129
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_B, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.1971917152404785
+wikitext-2-v1 Perplexity: 24.46373176574707
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_B, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.5763697624206543
+wikitext-2-v1 Perplexity: 35.74354553222656
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_C, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_C, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.0665817260742188
+wikitext-2-v1 Perplexity: 21.468393325805664
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_C, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.1880760192871094
+wikitext-2-v1 Perplexity: 24.241741180419922
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_first_C, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.5245392322540283
+wikitext-2-v1 Perplexity: 33.938133239746094
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_B, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_B, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.065018653869629
+wikitext-2-v1 Perplexity: 21.43486213684082
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_B, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.191406011581421
+wikitext-2-v1 Perplexity: 24.322601318359375
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_B, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.580803155899048
+wikitext-2-v1 Perplexity: 35.902366638183594
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_C, ratio: 0
+Memory footprint: 2901.26 MB
+wikitext-2-v1. Loss: 3.033095359802246
+wikitext-2-v1 Perplexity: 20.761396408081055
+Memory footprint: 2901.26 MB
+number of parameters after pruning: 1521097472
+number of mixer parameters after pruning: 505676544
+compression ratio: 1.0
+compression ratio mixer: 1.0
+Memory footprint: 2901.26 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_C, ratio: 0.25
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.25
+wikitext-2-v1. Loss: 3.0692553520202637
+wikitext-2-v1 Perplexity: 21.525867462158203
+Memory footprint: 2805.03 MB
+number of parameters after pruning: 1470642944
+number of mixer parameters after pruning: 455222016
+compression ratio: 0.9668301808866592
+compression ratio mixer: 0.9002237129669989
+Memory footprint: 2805.03 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_C, ratio: 0.5
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.5
+wikitext-2-v1. Loss: 3.1834042072296143
+wikitext-2-v1 Perplexity: 24.128753662109375
+Memory footprint: 2708.79 MB
+number of parameters after pruning: 1420188416
+number of mixer parameters after pruning: 404767488
+compression ratio: 0.9336603617733183
+compression ratio mixer: 0.8004474259339979
+Memory footprint: 2708.79 MB
+============================================================================================================================================================================================================================================================================================================
+Pruning method: taylor_second_C, ratio: 0.75
+Memory footprint: 2901.26 MB
+evaluate prune_dstate pruned 0.75
+wikitext-2-v1. Loss: 3.5238893032073975
+wikitext-2-v1 Perplexity: 33.91608428955078
+Memory footprint: 2612.56 MB
+number of parameters after pruning: 1369733888
+number of mixer parameters after pruning: 354312960
+compression ratio: 0.9004905426599775
+compression ratio mixer: 0.7006711389009967
+Memory footprint: 2612.56 MB

@@ -378,9 +378,6 @@ class MambaLMHeadModel(nn.Module, GenerationMixin):
         for layer in self.backbone.layers:
             layer.mixer.split_in_proj()
 
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import math
 
     def visualize_inproj(
             self,

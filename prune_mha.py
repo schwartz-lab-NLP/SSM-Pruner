@@ -398,9 +398,6 @@ def test_pruning_mamba2_headdim(ratio, method, exclude_layers=None, acc_grad_lig
     if ratio:
         print(f"evaluate prune_headdim pruned {ratio}")
     print(model)
-    # sparsity_ratio = check_sparsity(model)
-    # print(f"sparsity sanity check {sparsity_ratio:.4f}")
-
 
     if save:
         model.save_pretrained(f'mha_pruned_headdim_mamba2/mamba2_{method}_{str(ratio).replace(".", "")}')

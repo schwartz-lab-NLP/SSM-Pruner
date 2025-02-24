@@ -1,5 +1,6 @@
 
-
+import sys
+sys.path.extend(['.', './phi_mamba', './MambaInLlama', './original_mamba'])
 from pprint import pprint
 from typing import Union
 

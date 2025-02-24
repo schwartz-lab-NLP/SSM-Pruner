@@ -22,21 +22,18 @@ The code is based on the original repos, you'll find pruning methods implementat
 ### WANDA
 
 ```bash
-export PYTHONPATH=".:./phi_mamba:./MambaInLlama:./original_mamba:$PYTHONPATH"
 wanda/scripts/mamba.sh
 ```
 
 ### FLAP
 
 ```bash
-export PYTHONPATH=".:./phi_mamba:./MambaInLlama:./original_mamba:$PYTHONPATH"
 FLAP/scripts/mamba.sh
 ```
 
 ### Headdim & State Pruning
 
 ```bash
-export PYTHONPATH=".:./phi_mamba:./MambaInLlama:./original_mamba:$PYTHONPATH"
 python prune_mha.py
 ```
 

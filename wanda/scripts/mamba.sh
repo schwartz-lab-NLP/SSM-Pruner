@@ -23,7 +23,7 @@ run_python_command () {
     --sparsity_type $2 \
     --save $3 \
     --is_mamba \
-#    --is_lm_head \
+    --is_lm_head \
 #    --save_model $4 \
 #    --is_mamba_in_llama \
 #    --eval_zero_shot \

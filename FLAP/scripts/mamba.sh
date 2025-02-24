@@ -14,7 +14,7 @@ export PYTHONPATH="./phi_mamba:$PYTHONPATH"
 export PYTHONPATH="./MambaInLlama:$PYTHONPATH"
 # Define function to run python command
 run_python_command () {
-    python main.py \
+    python wanda/main.py \
     --model $model \
     --prune_method $1 \
     --pruning_ratio $2 \

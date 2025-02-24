@@ -3,7 +3,7 @@
 
 ## Introduction
   
-[//]: # (> **[PAPER]&#40;&#41;** [[arXiv]]&#40;&#41;   )
+> **[On Pruning State-Space LLMs]()** [[arXiv]]()   
 > *Tamer Ghattas, Michael Hassid and Roy Schwartz*   
 > *Hebrew University of Jerusalem*  
 

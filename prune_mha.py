@@ -263,7 +263,7 @@ def test_pruning_goombalab_headdim(ratio, method, exclude_layers=None, acc_grad_
     torch.cuda.empty_cache()
 
     # model = LMHeadModel.from_pretrained('goombalab/Phi-Mamba').bfloat16()
-    model = LMHeadModel.from_pretrained('tGhattas/Smol2-Mamba-1.9B').bfloat16().to('cuda')
+    model = LMHeadModel.from_pretrained('schwartz-lab/Smol2-Mamba-1.9B').bfloat16().to('cuda')
     if 'taylor' in method:
         calc_taylor_acc_grad(model, tokenizer_path='HuggingFaceTB/SmolLM2-1.7B')
     print_mem_footprint(model)
@@ -305,7 +305,7 @@ def test_pruning_goombalab_dstate(ratio, method, exclude_layers=None, acc_grad_l
     torch.cuda.empty_cache()
 
     model = LMHeadModel.from_pretrained('goombalab/Phi-Mamba').bfloat16()
-    # model = LMHeadModel.from_pretrained('tGhattas/Smol2-Mamba-1.9B').bfloat16().to('cuda')
+    # model = LMHeadModel.from_pretrained('schwartz-lab/Smol2-Mamba-1.9B').bfloat16().to('cuda')
     if 'taylor' in method:
         if acc_grad_light:
             calc_taylor_acc_grad(model)
@@ -472,7 +472,7 @@ def test_pruning_goombalab_gqa(pruning_methods, head_num, exclude_layers=None):
     torch.cuda.empty_cache()
 
     # model = LMHeadModel.from_pretrained('goombalab/Phi-Mamba', attn_implementation='eager')
-    model = LMHeadModel.from_pretrained('tGhattas/Smol2-Mamba-1.9B').bfloat16().to('cuda')
+    model = LMHeadModel.from_pretrained('schwartz-lab/Smol2-Mamba-1.9B').bfloat16().to('cuda')
     calc_taylor_acc_grad(model, tokenizer_path='HuggingFaceTB/SmolLM2-1.7B')
     print_mem_footprint(model)
     before = sum(p.numel() for p in model.parameters())

@@ -2,7 +2,7 @@ from huggingface_hub import snapshot_download, create_repo, upload_folder
 import shutil
 
 # Define the source and destination repositories
-source_repo = "tGhattas/Smol2-Mamba-1.9B"
+source_repo = "schwartz-lab/Smol2-Mamba-1.9B"
 destination_repo = "schwartz-lab/Smol2-Mamba-1.9B"
 
 # Local directory to temporarily store the downloaded repo

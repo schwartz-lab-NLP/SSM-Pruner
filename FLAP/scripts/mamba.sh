@@ -24,9 +24,9 @@ run_python_command () {
     --nsamples 1024 \
     --is_mamba \
     --skip_mlp \
-    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
     --eval \
     --is_lm_head  # uncomment for schwartz-lab/Smol2-Mamba-1.9B & goombalab/Phi-Mamba
+#    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
 #    --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
 #    --skip_attn \
 #    --unstr

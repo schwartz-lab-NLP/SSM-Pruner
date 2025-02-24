@@ -341,7 +341,7 @@ def test_pruning_goombalab_dstate(ratio, method, exclude_layers=None, acc_grad_l
     torch.cuda.empty_cache()
 
 
-def test_pruning_mamba2_dstate(ratio, method, exclude_layers=None, acc_grad_light=True):
+def test_pruning_mamba2_dstate(ratio, method, exclude_layers=None, acc_grad_light=True, save=False):
     torch.cuda.empty_cache()
 
     model = MambaLMHeadModel.from_pretrained('state-spaces/mamba2-2.7b', device='cuda', dtype=torch.bfloat16)
@@ -369,17 +369,17 @@ def test_pruning_mamba2_dstate(ratio, method, exclude_layers=None, acc_grad_ligh
     print(f"compression ratio mixer: {after_mixer / before_mixer}")
     print(model)
 
-    # print(pruned)
-    model.save_pretrained(f'mha_pruned_bc_dstates/mamba2_{str(ratio).replace(".", "")}')
-    model = MambaLMHeadModel.from_pretrained(f'mha_pruned_bc_dstates/mamba2_{str(ratio).replace(".", "")}',
-                                             device='cuda', dtype=torch.bfloat16)
+    if save:
+        model.save_pretrained(f'mha_pruned_bc_dstates/mamba2_{str(ratio).replace(".", "")}')
+        model = MambaLMHeadModel.from_pretrained(f'mha_pruned_bc_dstates/mamba2_{str(ratio).replace(".", "")}',
+                                                 device='cuda', dtype=torch.bfloat16)
     evaluate_wikitext(model, tokenizer_path="EleutherAI/gpt-neox-20b")
     print_mem_footprint(model)
     
     torch.cuda.empty_cache()
 
 
-def test_pruning_mamba2_headdim(ratio, method, exclude_layers=None, acc_grad_light=True):
+def test_pruning_mamba2_headdim(ratio, method, exclude_layers=None, acc_grad_light=True, save=False):
     print("FUNCTION test_pruning_mamba2_headdim")
     print(f"ARGS ratio: {ratio}, method: {method}, exclude_layers: {exclude_layers}, acc_grad_light: {acc_grad_light}")
     torch.cuda.empty_cache()
@@ -402,10 +402,10 @@ def test_pruning_mamba2_headdim(ratio, method, exclude_layers=None, acc_grad_lig
     # print(f"sparsity sanity check {sparsity_ratio:.4f}")
 
 
-    # print(pruned)
-    model.save_pretrained(f'mha_pruned_headdim_mamba2/mamba2_{method}_{str(ratio).replace(".", "")}')
-    model = MambaLMHeadModel.from_pretrained(f'mha_pruned_headdim_mamba2/mamba2_{method}_{str(ratio).replace(".", "")}',
-                                                device='cuda', dtype=torch.bfloat16)
+    if save:
+        model.save_pretrained(f'mha_pruned_headdim_mamba2/mamba2_{method}_{str(ratio).replace(".", "")}')
+        model = MambaLMHeadModel.from_pretrained(f'mha_pruned_headdim_mamba2/mamba2_{method}_{str(ratio).replace(".", "")}',
+                                                    device='cuda', dtype=torch.bfloat16)
     evaluate_wikitext(model, tokenizer_path="EleutherAI/gpt-neox-20b")
     after = sum(p.numel() for p in model.parameters())
     after_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n)

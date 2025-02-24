@@ -15,7 +15,7 @@ The code is based on the original repos, you'll find pruning methods implementat
 - `conda activate ssm-pruner`
 - `pip install torch==2.4.0+cu121 torchvision torchaudio==2.4.0+cu121 --extra-index-url https://download.pytorch.org/whl/cu121 --no-cache-dir`
 - `pip install transformers==4.48.1`
-- `pip install triton mamba-ssm==2.2.2 flash-attn==2.5.6`: the core Mamba package.
+- `pip install triton mamba-ssm==2.2.2 flash-attn==2.6.3`: the core Mamba package.
 
 ## Quickstart
 

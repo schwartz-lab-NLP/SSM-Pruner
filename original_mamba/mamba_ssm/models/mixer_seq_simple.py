@@ -6,8 +6,12 @@ import json
 import os
 import copy
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.colors as colors
+
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as colors
+except:
+    print("WARNING: you need to install matplotlib to use the visualization functions.")
 
 from collections import namedtuple
 

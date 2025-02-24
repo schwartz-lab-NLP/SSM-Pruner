@@ -4,8 +4,7 @@ from .sparsegpt import SparseGPT
 from .layerwrapper import WrappedGPT
 from .data import get_loaders 
 from .ablate import AblateGPT
-import os
-import matplotlib.pyplot as plt
+
 
 def find_layers(module, layers=[nn.Linear], name=''):
     """
@@ -300,18 +299,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
         model.config.use_cache = use_cache
     torch.cuda.empty_cache()
 
-    # save plots
-    if args.plot:
 
-        save_dir = os.path.join(args.save, "plots")
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        for i in range(len(plots)):
-            for k in plots[i]:
-                plt.imshow(plots[i][k])
-                plt.colorbar()
-                plt.savefig(os.path.join(save_dir, f"layer_{i}_{k}.png"))
-                plt.close()
 
 
 @torch.no_grad()

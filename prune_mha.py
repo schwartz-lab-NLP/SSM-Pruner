@@ -410,7 +410,6 @@ def test_pruning_mamba2_headdim(ratio, method, exclude_layers=None, acc_grad_lig
     print(f"number of mixer parameters after pruning: {after_mixer}")
     print(f"compression ratio: {after / before}")
     print(f"compression ratio mixer: {after_mixer / before_mixer}")
-    # print_mem_footprint(model)
     torch.cuda.empty_cache()
 
 

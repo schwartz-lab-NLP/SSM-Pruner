@@ -49,5 +49,13 @@ For fine-tuning our pruned models with distillation loss we used [finetune.py](p
 ## Citation
 
 ```bibtex
-
+@misc{ghattas2025pruningstatespacellms,
+      title={On Pruning State-Space LLMs}, 
+      author={Tamer Ghattas and Michael Hassid and Roy Schwartz},
+      year={2025},
+      eprint={2502.18886},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2502.18886}, 
+}
 ```

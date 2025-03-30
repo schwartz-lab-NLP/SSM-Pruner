@@ -204,7 +204,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
         if args.is_mamba and not args.split_mamba:
             mamba_indices = layer.mixer.get_in_proj_indices() if hasattr(layer, "mixer") else {}
         for name in subset:
-            excluded = []#['fc', 'up_proj', 'down_proj', 'gate_proj', 'mlp', 'attn','out_proj']
+            excluded = ['fc', 'up_proj', 'down_proj', 'gate_proj', 'mlp','out_proj']
             if any([ex in name for ex in excluded]):
                 continue
             print(f"pruning layer {i} name {name}")

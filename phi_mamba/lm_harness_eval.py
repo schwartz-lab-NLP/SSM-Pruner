@@ -119,8 +119,8 @@ class SmolEvalWrapper(BaseEvalWrapper):
 class Smol17EvalWrapper(BaseEvalWrapper):
     AUTO_MODEL_CLASS = transformers.AutoModelForCausalLM
 
-    def __init__(self, **kwargs):
-        _model = AutoModelForCausalLM.from_pretrained("HuggingFaceTB/SmolLM2-1.7B")
+    def __init__(self, pretrained="HuggingFaceTB/SmolLM2-1.7B", **kwargs):
+        _model = AutoModelForCausalLM.from_pretrained(pretrained)
         super().__init__(_model, tokenizer="HuggingFaceTB/SmolLM2-1.7B", **kwargs)
         self._model.to(self._device).to(self._dtype).eval()
 

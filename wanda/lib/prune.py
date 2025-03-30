@@ -190,7 +190,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
             with torch.no_grad():
                 if residual is None:
                     if args.is_mamba_in_llama:
-                        position_embeddings = backbone.model.rotary_emb(inps[j].unsqueeze(0), position_ids)
+                        position_embeddings = (backbone.model if hasattr(backbone, 'model') else backbone).rotary_emb(inps[j].unsqueeze(0), position_ids)
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids, position_embeddings=position_embeddings )
                     else:
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids)
@@ -286,7 +286,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
             with torch.no_grad():
                 if residual is None:
                     if args.is_mamba_in_llama:
-                        position_embeddings = backbone.model.rotary_emb(inps[j].unsqueeze(0), position_ids)
+                        position_embeddings = (backbone.model if hasattr(backbone, 'model') else backbone).rotary_emb(inps[j].unsqueeze(0), position_ids)
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids, position_embeddings=position_embeddings )
                     else:
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids)

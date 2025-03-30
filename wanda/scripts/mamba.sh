@@ -24,10 +24,10 @@ run_python_command () {
     --sparsity_ratio $5 \
     --sparsity_type $2 \
     --save $3 \
-    --save_model $4
+    --save_model $4 \
+    --is_mamba_in_llama 
     # --is_mamba \
     # --is_lm_head \
-#    --is_mamba_in_llama \
 #    --eval_zero_shot \
 #    --lm_eval_name auto-lm-head
 

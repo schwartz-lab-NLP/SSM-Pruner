@@ -175,7 +175,7 @@ def main():
             model.save_pretrained_distributed(args.save_model,
                                               is_main_process=True,
                                               update_config=True)
-        elif args.is_mamba_in_llama:
+        elif args.is_mamba_in_llama and args.is_mamba:
             model.save_config(args.save_model)
             model.model.save_pretrained(args.save_model, safe_serialization=False, max_shard_size="50GB")
         else:

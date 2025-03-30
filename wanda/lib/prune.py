@@ -32,7 +32,7 @@ def check_sparsity(model):
     use_cache = model.config.use_cache 
     model.config.use_cache = False 
     backbone = model.model if hasattr(model, "model") else model.backbone
-    layers = backbone.layers if hasattr(model, "backbone") else backbone.model.layers
+    layers = backbone.layers if hasattr(backbone, "layers") else backbone.model.layers
     count = 0 
     total_params = 0
     for i in range(len(layers)):

@@ -54,8 +54,8 @@ run_python_command () {
 
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_025" "out/mamba/unstructured/wanda/SMOL19_05/model/" 0.5
 
-run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
-# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_05" "out/mamba/unstructured/wanda/SMOL17_05/model/" 0.5
+# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_05" "out/mamba/unstructured/wanda/SMOL17_05/model/" 0.5
 
 
 

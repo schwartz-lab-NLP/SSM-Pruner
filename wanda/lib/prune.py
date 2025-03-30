@@ -204,7 +204,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
         if args.is_mamba and not args.split_mamba:
             mamba_indices = layer.mixer.get_in_proj_indices() if hasattr(layer, "mixer") else {}
         for name in subset:
-            excluded = ['fc', 'up_proj', 'down_proj', 'gate_proj', 'mlp', 'attn','out_proj']  # [ 'out_proj']
+            excluded = []#['fc', 'up_proj', 'down_proj', 'gate_proj', 'mlp', 'attn','out_proj']
             if any([ex in name for ex in excluded]):
                 continue
             print(f"pruning layer {i} name {name}")
@@ -274,11 +274,10 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
                     for exluded_in_proj_part in exluded_in_proj_parts:
                         start, end = mamba_indices[exluded_in_proj_part]
                         W_mask[start:end, :] = 0
-                # import pdb; pdb.set_trace()
+                
                 subset[name].weight.data[W_mask] = 0  ## set weights to zero
-                # save the mask as an image I can see later
+                
 
-                # run_viz_anything(W_mask)
 
 
 
@@ -292,7 +291,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids)
                 else:
                     tmp_out, residual = layer(inps[j].unsqueeze(0), residual, attention_mask=attention_mask, position_ids=position_ids)
-                # import pdb; pdb.set_trace()
+                
                 outs[j] = tmp_out[0] if not args.is_lm_head else tmp_out['hidden_states']
         inps, outs = outs, inps
     if hasattr(model.config, "use_cache"):

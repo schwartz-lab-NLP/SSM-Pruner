@@ -109,7 +109,7 @@ def main():
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
 
-        tokenizer_path = args.model,
+        tokenizer_path = args.model
 
     device = torch.device("cuda:0")
     if "30b" in args.model or "65b" in args.model:  # for 30b and 65b we use device_map to load onto multiple A6000 GPUs, thus the processing here.

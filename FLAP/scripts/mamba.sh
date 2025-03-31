@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #model="state-spaces/mamba2-2.7b"
-model="schwartz-lab/Smol2-Mamba-1.9B"
+# model="schwartz-lab/Smol2-Mamba-1.9B"
+model="HuggingFaceTB/SmolLM2-1.7B"
 #model="goombalab/Phi-Mamba"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
 
@@ -22,12 +23,13 @@ run_python_command () {
     --metrics $4 \
     --structure $5 \
     --nsamples 1024 \
-    --is_mamba \
+    
     --skip_mlp \
     --eval \
-    --is_lm_head  # uncomment for schwartz-lab/Smol2-Mamba-1.9B & goombalab/Phi-Mamba
-#    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
-#    --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
+    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
+    --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
+    # --is_lm_head  # uncomment for schwartz-lab/Smol2-Mamba-1.9B & goombalab/Phi-Mamba
+    # --is_mamba \
 #    --skip_attn \
 #    --unstr
 #    --is_phi

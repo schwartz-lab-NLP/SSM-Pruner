@@ -23,7 +23,6 @@ run_python_command () {
     --metrics $4 \
     --structure $5 \
     --nsamples 1024 \
-    
     --skip_mlp \
     --eval \
     --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \

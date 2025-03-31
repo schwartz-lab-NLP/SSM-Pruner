@@ -52,7 +52,7 @@ def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_
             )
 
     backbone = model.model if hasattr(model, "model") else model.backbone
-    layers = backbone.layers if hasattr(model, "backbone") else backbone.model.layers
+    layers = backbone.layers if hasattr(backbone, "layers") else backbone.model.layers
     for i in range(len(layers)):
         if not is_mamba:
             out_projection  = model.model.layers[i].self_attn.o_proj if hasattr(model.model.layers[i].self_attn, 'o_proj') else model.model.layers[i].self_attn.dense

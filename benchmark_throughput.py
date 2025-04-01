@@ -271,7 +271,7 @@ def run_benchmark(
             print(f"  Benchmarking batch_size={batch_size}, seq_len={seq_len}")
             
             # Create random input data of the appropriate shape
-            input_ids = torch.randint(0, model.config.input.vocab_size, (batch_size, seq_len), device=device)
+            input_ids = torch.randint(0, model.config.LanguageModel.input.vocab_size, (batch_size, seq_len), device=device)
             attention_mask = torch.ones_like(input_ids)
             
             # Benchmark

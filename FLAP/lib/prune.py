@@ -141,7 +141,7 @@ def prepare_calibration_input(model, dataloader, device):
     if hasattr(model.config, "use_cache"):
         use_cache = model.config.use_cache
         model.config.use_cache = False
-    # import pdb; pdb.set_trace()
+
     backbone = model.model if hasattr(model, "model") else model.backbone
     layers = backbone.layers if hasattr(backbone, "layers") else backbone.model.layers
     # layers = model.model.layers

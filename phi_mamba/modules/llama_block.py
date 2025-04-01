@@ -28,7 +28,7 @@ class Block(nn.Module):
         self.d_model = d_model
         self.config = config
         self.layer_idx = layer_idx
-
+        import pdb; pdb.set_trace()
         # Mixer
         MixerClass = import_module(config.CoreType).Mixer
         self.mixer = MixerClass(

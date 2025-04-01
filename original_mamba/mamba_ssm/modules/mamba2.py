@@ -314,9 +314,6 @@ class Mamba2(nn.Module, PyTorchModelHubMixin):
                 y = torch.repeat_interleave(y, self.out_proj.in_features // y.shape[-1], dim=-1)
                 z = torch.repeat_interleave(z, self.out_proj.in_features // z.shape[-1], dim=-1)
             if self.rmsnorm:
-                # if self.repeat_y:
-                #     import pdb;
-                #     pdb.set_trace()
                 y = self.norm(y, z)
             if d_mlp > 0:
                 y = torch.cat([F.silu(z0) * x0, y], dim=-1)

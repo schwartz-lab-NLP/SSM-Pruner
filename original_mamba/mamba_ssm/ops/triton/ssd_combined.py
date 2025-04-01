@@ -816,9 +816,7 @@ class MambaSplitConv1dScanCombinedFn(torch.autograd.Function):
                 dtype = torch.get_autocast_gpu_dtype()
                 out, outproj_weight = out.to(dtype), outproj_weight.to(dtype)
                 outproj_bias = outproj_bias.to(dtype) if outproj_bias is not None else None
-            # if out.shape[-1] != outproj_weight.shape[-1]:
-            #     # import pdb; pdb.set_trace()
-            #     out = torch.repeat_interleave(out, outproj_weight.shape[-1] // out.shape[-1], dim=-1)
+          
             out = F.linear(out, outproj_weight, outproj_bias)
         else:
             assert outproj_bias is None

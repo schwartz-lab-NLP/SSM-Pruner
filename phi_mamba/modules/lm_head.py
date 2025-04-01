@@ -245,6 +245,26 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
                 new_block_config['core_input']['inner_hidden_size'] = layer.mixer.self_attn.inner_hidden_size if hasattr(layer.mixer.self_attn, 'inner_hidden_size') else layer.mixer.self_attn.hidden_size
                 new_block_config['core_input']['num_key_value_heads'] = layer.mixer.self_attn.num_key_value_heads
                 new_block_config['core_input']['num_attention_heads'] = layer.mixer.self_attn.num_heads
+                new_block_config['core_input']['attention_bias'] = layer.mixer.self_attn.q_proj.bias is not None
+                new_block_config['core_input']['attention_dropout'] = layer.mixer.self_attn.attention_dropout
+                new_block_config['core_input']['bos_token_id'] = 0
+                new_block_config['core_input']['eos_token_id'] = 0
+                new_block_config['core_input']['head_dim'] = layer.mixer.self_attn.head_dim
+                new_block_config['core_input']['hidden_act'] = 'silu'
+                new_block_config['core_input']['hidden_size'] = layer.mixer.self_attn.hidden_size
+                new_block_config['core_input']['initializer_range'] = 0.02
+                new_block_config['core_input']['intermediate_size'] = layer.mlp.gate_proj.weight.data.shape[0]
+                new_block_config['core_input']['max_position_embeddings'] = layer.mixer.self_attn.rotary_emb.max_position_embeddings
+                new_block_config['core_input']['mlp_bias'] = layer.mlp.gate_proj.bias is not None
+                new_block_config['core_input']['model_type'] = 'llama'
+                new_block_config['core_input']['pretraining_tp'] = 1
+                new_block_config['core_input']['rms_norm_eps'] = 1e-5
+                new_block_config['core_input']['rope_scaling'] = None
+                new_block_config['core_input']['rope_theta'] = layer.mixer.self_attn.rotary_emb.base
+                new_block_config['core_input']['tie_word_embeddings'] = True
+                new_block_config['core_input']['torch_dtype'] = 'bfloat16'
+                new_block_config['core_input']['use_cache'] = True
+                new_block_config['core_input']['vocab_size'] = 49152
                 new_block_config['mlp']['intermediate_size'] = layer.mlp.gate_proj.weight.data.shape[0]
             else:
                 new_block_config['core_input']['inner_hidden_size'] = layer.mixer.self_attn.inner_hidden_size if hasattr(layer.mixer.self_attn, 'inner_hidden_size') else layer.mixer.self_attn.hidden_size

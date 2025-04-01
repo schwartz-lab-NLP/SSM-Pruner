@@ -18,6 +18,7 @@ class Mixer(nn.Module):
 
         # Select the attention class based on the configuration
         attn_type = kwargs.get("attn_type", "eager")
+        import pdb; pdb.set_trace()
         self.self_attn = LLAMA_ATTENTION_CLASSES[attn_type](
             LlamaConfig(**self.model_cfg),
             layer_idx,

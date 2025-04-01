@@ -47,7 +47,6 @@ def get_system_info() -> Dict:
 def measure_throughput(
     model: torch.nn.Module,
     input_ids: torch.Tensor,
-    attention_mask: torch.Tensor,
     n_runs: int = 10,
     warmup_runs: int = 5,
     use_amp: bool = True,
@@ -60,7 +59,6 @@ def measure_throughput(
     Args:
         model: The model to benchmark
         input_ids: Input token IDs
-        attention_mask: Attention mask
         n_runs: Number of runs for benchmarking
         warmup_runs: Number of warmup runs (not counted in benchmarking)
         use_amp: Whether to use automatic mixed precision
@@ -74,7 +72,6 @@ def measure_throughput(
     
     # Ensure inputs are on the correct device
     input_ids = input_ids.to(device)
-    attention_mask = attention_mask.to(device)
     
     # Get actual batch size and sequence length from inputs
     actual_batch_size = input_ids.shape[0]
@@ -102,7 +99,7 @@ def measure_throughput(
         for _ in range(n_runs):
             start_time = time.time()
             with autocast(enabled=use_amp):
-                _ = model(input_ids=input_ids, attention_mask=attention_mask)
+                _ = model(input_ids=input_ids)
             
             torch.cuda.synchronize()
             end_time = time.time()
@@ -116,7 +113,6 @@ def measure_throughput(
 def measure_generation_throughput(
     model: torch.nn.Module,
     input_ids: torch.Tensor,
-    attention_mask: torch.Tensor,
     generate_length: int,
     n_runs: int = 5,
     warmup_runs: int = 2,
@@ -128,7 +124,6 @@ def measure_generation_throughput(
     Args:
         model: The model to benchmark
         input_ids: Input token IDs
-        attention_mask: Attention mask
         generate_length: Number of tokens to generate
         n_runs: Number of runs for benchmarking
         warmup_runs: Number of warmup runs (not counted in benchmarking)
@@ -141,7 +136,6 @@ def measure_generation_throughput(
     
     # Ensure inputs are on the correct device
     input_ids = input_ids.to(device)
-    attention_mask = attention_mask.to(device)
     
     # Warmup runs
     with torch.no_grad():
@@ -149,10 +143,8 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    attention_mask=attention_mask,
                     max_new_tokens=generate_length,
-                    do_sample=False,
-                    max_length=generate_length,
+                    do_sample=False
                 )
     
     # Synchronize before timing
@@ -166,7 +158,6 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    attention_mask=attention_mask,
                     max_new_tokens=generate_length,
                     do_sample=False
                 )
@@ -273,13 +264,11 @@ def run_benchmark(
             
             # Create random input data of the appropriate shape
             input_ids = torch.randint(0, model.config.LanguageModel.input.vocab_size, (batch_size, seq_len), device=device)
-            attention_mask = torch.ones_like(input_ids)
             
             # Benchmark
             mean_throughput, std_throughput, all_throughputs = measure_throughput(
                 model=model,
                 input_ids=input_ids,
-                attention_mask=attention_mask,
                 use_amp=use_amp,
                 batch_size=batch_size,
                 sequence_length=seq_len,
@@ -307,13 +296,11 @@ def run_benchmark(
         
         # Create random input data
         input_ids = torch.randint(0, model.config.LanguageModel.input.vocab_size, (batch_size, context_len), device=device)
-        attention_mask = torch.ones_like(input_ids)
         
         # Benchmark
         mean_throughput, std_throughput, all_throughputs = measure_generation_throughput(
             model=model,
             input_ids=input_ids,
-            attention_mask=attention_mask,
             generate_length=gen_len,
             use_amp=use_amp,
         )

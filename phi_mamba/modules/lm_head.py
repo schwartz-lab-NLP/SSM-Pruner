@@ -27,6 +27,7 @@ try:
 except ImportError:
     class MambaMixer: pass
 from modules.mixers.phi_attention import Mixer as PhiMixer
+from modules.mixers.llama_attention import Mixer as LlamaMixer
 from utils.config import Config
 
 
@@ -216,10 +217,10 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
             'MixerModel': current_config['MixerModel']
         }
 
-        type_map = {MambaMixer: 'Block_MAMBA', PhiMixer: 'Block_PHI'}
+        type_map = {MambaMixer: 'Block_MAMBA', PhiMixer: 'Block_PHI', LlamaMixer: 'Block_LLAMA'}
         blocks = []
         for idx, layer in enumerate(self.backbone.layers):
-            # import pdb; pdb.set_trace()
+            
             new_block_config = copy.deepcopy(mohawk_config_template[type_map[type(layer.mixer)]])
             new_block_config['n_layers'] = 1
             if type(layer.mixer) == MambaMixer:

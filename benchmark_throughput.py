@@ -143,7 +143,6 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    max_new_tokens=generate_length,
                     do_sample=False,
                     max_length=generate_length,
                 )
@@ -159,7 +158,6 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    max_new_tokens=generate_length,
                     do_sample=False,
                     max_length=generate_length,
                 )

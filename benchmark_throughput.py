@@ -305,7 +305,7 @@ def run_benchmark(
         context_len = 32  # Short context for generation benchmarks
         
         # Create random input data
-        input_ids = torch.randint(0, model.config.MixerModel.input.vocab_size, (batch_size, context_len), device=device)
+        input_ids = torch.randint(0, model.config.LanguageModel.input.vocab_size, (batch_size, context_len), device=device)
         attention_mask = torch.ones_like(input_ids)
         
         # Benchmark

@@ -254,7 +254,6 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
                 new_block_config['core_input']['hidden_size'] = layer.mixer.self_attn.hidden_size
                 new_block_config['core_input']['initializer_range'] = 0.02
                 new_block_config['core_input']['intermediate_size'] = layer.mlp.gate_proj.weight.data.shape[0]
-                new_block_config['core_input']['max_position_embeddings'] = layer.mixer.self_attn.rotary_emb.max_position_embeddings
                 new_block_config['core_input']['mlp_bias'] = layer.mlp.gate_proj.bias is not None
                 new_block_config['core_input']['model_type'] = 'llama'
                 new_block_config['core_input']['pretraining_tp'] = 1

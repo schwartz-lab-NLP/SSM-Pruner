@@ -9,7 +9,6 @@ import torch
 import torch.nn as nn
 from huggingface_hub import PyTorchModelHubMixin
 from huggingface_hub.hub_mixin import T
-from torch.fx.experimental.symbolic_shapes import has_symbolic_sizes_strides
 from transformers import StaticCache
 
 from modules.modeling_llama import _prepare_4d_causal_attention_mask_with_cache_position, LlamaForCausalLM

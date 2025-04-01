@@ -143,8 +143,8 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    do_sample=False,
                     max_length=generate_length,
+                    top_k=1,  # Equivalent to greedy decoding
                 )
     
     # Synchronize before timing
@@ -158,8 +158,8 @@ def measure_generation_throughput(
             with autocast(enabled=use_amp):
                 _ = model.generate(
                     input_ids=input_ids,
-                    do_sample=False,
                     max_length=generate_length,
+                    top_k=1,  # Equivalent to greedy decoding
                 )
             
             torch.cuda.synchronize()

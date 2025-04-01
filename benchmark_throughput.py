@@ -91,7 +91,7 @@ def measure_throughput(
     with torch.no_grad():
         for _ in range(warmup_runs):
             with autocast(enabled=use_amp):
-                _ = model(input_ids=input_ids, attention_mask=attention_mask)
+                _ = model(input_ids=input_ids)
     
     # Synchronize before timing
     torch.cuda.synchronize()

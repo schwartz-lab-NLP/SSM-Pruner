@@ -213,7 +213,7 @@ def run_benchmark(
     model_path: str,
     batch_sizes: List[int] = [1, 4, 16],
     sequence_lengths: List[int] = [128, 512, 1024],
-    generation_lengths: List[int] = [128],
+    generation_lengths: List[int] = [128, 512, 1024],
     use_amp: bool = True,
     precision: torch.dtype = torch.bfloat16,
     output_file: Optional[str] = None,

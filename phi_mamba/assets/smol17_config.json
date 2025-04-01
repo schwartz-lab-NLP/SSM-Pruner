@@ -18,7 +18,9 @@
                 "rope_scaling": null,
                 "rope_theta": 130000,
                 "rope_interleaved": false,
-                "head_dim": 64
+                "head_dim": 64,
+                "hidden_size": 2048,
+                "num_attention_heads": 32
             }
         }
     },

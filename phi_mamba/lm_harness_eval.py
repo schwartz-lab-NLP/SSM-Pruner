@@ -132,6 +132,7 @@ class Smol17LMheadEvalWrapper(BaseEvalWrapper):
 
     def __init__(self, pretrained=None, peft=None, **kwargs):
         path = os.environ.get("EVAL_PATH", ".")
+        import pdb; pdb.set_trace()
         _model = LMHeadModel.from_pretrained(path, strict=True)
         if peft is not None:
             _model = PeftModel.from_pretrained(_model, peft)

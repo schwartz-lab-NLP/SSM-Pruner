@@ -258,12 +258,6 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
                 new_block_config['core_input']['model_type'] = 'llama'
                 new_block_config['core_input']['pretraining_tp'] = 1
                 new_block_config['core_input']['rms_norm_eps'] = 1e-5
-                new_block_config['core_input']['rope_scaling'] = None
-                new_block_config['core_input']['rope_theta'] = layer.mixer.self_attn.rotary_emb.base
-                new_block_config['core_input']['tie_word_embeddings'] = True
-                new_block_config['core_input']['torch_dtype'] = 'bfloat16'
-                new_block_config['core_input']['use_cache'] = True
-                new_block_config['core_input']['vocab_size'] = 49152
                 new_block_config['mlp']['intermediate_size'] = layer.mlp.gate_proj.weight.data.shape[0]
             else:
                 new_block_config['core_input']['inner_hidden_size'] = layer.mixer.self_attn.inner_hidden_size if hasattr(layer.mixer.self_attn, 'inner_hidden_size') else layer.mixer.self_attn.hidden_size

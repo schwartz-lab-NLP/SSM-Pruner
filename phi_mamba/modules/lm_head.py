@@ -525,7 +525,7 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
             config_path = kwargs.get("config_path", os.path.join(pretrained_model_name_or_path, "config.json"))
             config = Config.from_file(config_path)
             model = LMHeadModel(config, *model_args, **kwargs)
-            # import pdb; pdb.set_trace()
+            
             model_path = os.path.join(pretrained_model_name_or_path, "pytorch_model.bin")
             state_dict = torch.load(model_path)
             state_dict = LMHeadModel._convert_state_dict(state_dict)

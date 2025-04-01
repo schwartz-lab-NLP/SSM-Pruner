@@ -151,7 +151,8 @@ def measure_generation_throughput(
                     input_ids=input_ids,
                     attention_mask=attention_mask,
                     max_new_tokens=generate_length,
-                    do_sample=False
+                    do_sample=False,
+                    max_length=generate_length,
                 )
     
     # Synchronize before timing

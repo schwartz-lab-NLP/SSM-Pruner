@@ -41,9 +41,9 @@
     "Block_LLAMA": {
         "n_layers":0,
         "BlockType":"modules.llama_block",
-        "block_input":{
-            "resid_dropout":0.0,
-            "rms_norm_eps": 0.0
+        "block_input": {
+            "resid_dropout": 0.0,
+            "rms_norm_eps": 1e-05
         },
         "mlp":{
             "intermediate_size":0

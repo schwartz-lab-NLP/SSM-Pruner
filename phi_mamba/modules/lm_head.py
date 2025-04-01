@@ -242,11 +242,15 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
                 new_block_config['mlp']['intermediate_size'] = layer.mlp.fc1.weight.data.shape[0] if hasattr(layer.mlp, 'fc1') else layer.mlp.gate_proj.weight.data.shape[0]
                 new_block_config['mlp']['last_mlp_bias'] = (layer.mlp.fc1.bias if hasattr(layer.mlp, 'fc2') else layer.mlp.down_proj.bias) is not None
             elif type(layer.mixer) == LlamaMixer:
+                new_block_config['block_input']['rms_norm_eps'] = layer.mixer.self_attn.rms_norm_eps
+                new_block_config['block_input']['resid_dropout'] = layer.mixer.self_attn.resid_dropout
                 new_block_config['core_input']['inner_hidden_size'] = layer.mixer.self_attn.inner_hidden_size if hasattr(layer.mixer.self_attn, 'inner_hidden_size') else layer.mixer.self_attn.hidden_size
                 new_block_config['core_input']['num_key_value_heads'] = layer.mixer.self_attn.num_key_value_heads
                 new_block_config['core_input']['num_attention_heads'] = layer.mixer.self_attn.num_heads
                 new_block_config['mlp']['intermediate_size'] = layer.mlp.gate_proj.weight.data.shape[0]
             else:
+                new_block_config['block_input']['rms_norm_eps'] = layer.mixer.self_attn.rms_norm_eps
+                new_block_config['block_input']['resid_dropout'] = layer.mixer.self_attn.resid_dropout
                 new_block_config['core_input']['inner_hidden_size'] = layer.mixer.self_attn.inner_hidden_size if hasattr(layer.mixer.self_attn, 'inner_hidden_size') else layer.mixer.self_attn.hidden_size
                 new_block_config['core_input']['num_key_value_heads'] = layer.mixer.self_attn.num_key_value_heads
                 new_block_config['core_input']['num_attention_heads'] = layer.mixer.self_attn.num_heads

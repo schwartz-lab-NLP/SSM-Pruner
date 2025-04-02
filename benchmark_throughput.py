@@ -292,7 +292,7 @@ def run_benchmark(
         
         # Generation typically uses small batch sizes
         batch_size = 1
-        context_len = 32  # Short context for generation benchmarks
+        context_len = gen_len // 4  # Short context for generation benchmarks
         
         # Create random input data
         input_ids = torch.randint(0, model.config.LanguageModel.input.vocab_size, (batch_size, context_len), device=device)
@@ -399,7 +399,7 @@ def main():
     parser.add_argument("--output_file", type=str, default=None, help="Path to save benchmark results")
     parser.add_argument("--batch_sizes", type=int, nargs="+", default=[1, 4, 16], help="Batch sizes to benchmark")
     parser.add_argument("--sequence_lengths", type=int, nargs="+", default=[128, 512, 1024], help="Sequence lengths to benchmark")
-    parser.add_argument("--generation_lengths", type=int, nargs="+", default=[128], help="Generation lengths to benchmark")
+    parser.add_argument("--generation_lengths", type=int, nargs="+", default=[128, 512, 1024], help="Generation lengths to benchmark")
     parser.add_argument("--no_amp", action="store_true", help="Disable automatic mixed precision")
     parser.add_argument("--precision", type=str, choices=["float32", "float16", "bfloat16"], default="bfloat16", help="Model precision")
     

@@ -206,6 +206,13 @@ class LlamaRotaryEmbedding(nn.Module):
 
     @torch.no_grad()
     def forward(self, x, position_ids):
+        if position_ids is None:
+            # If position_ids is None, create a default tensor with sequential positions
+            # Starting from 0 to match the common pattern in transformer models
+            batch_size = x.shape[0] if x.dim() > 2 else 1
+            seq_len = x.shape[1] if x.dim() > 1 else x.shape[0]
+            position_ids = torch.arange(seq_len, device=x.device).unsqueeze(0).expand(batch_size, -1)
+        
         if "dynamic" in self.rope_type:
             self._dynamic_frequency_update(position_ids, device=x.device)
 
@@ -1299,7 +1306,7 @@ class LlamaForCausalLM(LlamaPreTrainedModel):
             if past_key_values:
                 position_ids = position_ids[:, -input_ids.shape[1] :]
 
-                # This `clone` call is needed to avoid recapturing cuda graphs with `torch.compile`'s  `mode="reduce-overhead`, as otherwise the input `position_ids` would have various stride during the decoding. Here, simply using `.contiguous()` is not sufficient as in the batch size = 1 case, `position_ids` is already contiguous but with varying stride which retriggers a capture.
+                # This `clone` call is needed to avoid recapturing cuda graphs with `torch.compile`'s  `mode="reduce-overhead", as otherwise the input `position_ids` would have various stride during the decoding. Here, simply using `.contiguous()` is not sufficient as in the batch size = 1 case, `position_ids` is already contiguous but with varying stride which retriggers a capture.
                 position_ids = position_ids.clone(memory_format=torch.contiguous_format)
 
         # if `inputs_embeds` are passed, we only want to use them in the 1st generation step

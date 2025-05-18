@@ -28,7 +28,7 @@ run_python_command () {
     --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
     --is_lm_head \
     --is_mamba \
-    --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
+    # --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
 #    --skip_attn \
 #    --unstr
 #    --is_phi

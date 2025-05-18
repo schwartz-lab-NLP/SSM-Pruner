@@ -766,8 +766,7 @@ def prune_wanda_sp(args, model, tokenizer, device=torch.device("cuda:0")):
             mlp_down_proj_key = 'mlp.down_proj' if hasattr(layer.mlp, 'down_proj') else 'mlp.fc2'
             subset.update({mlp_down_proj_key: find_layers(layer)[mlp_down_proj_key]})
 
-        if f"model.layers.{i}" in getattr(model, 'hf_device_map',
-                                          {}):  ## handle the case for llama-30B and llama-65B, when the device map has multiple GPUs;
+        if f"model.layers.{i}" in getattr(model, 'hf_device_map', {}):  ## handle the case for llama-30B and llama-65B, when the device map has multiple GPUs;
             dev = model.hf_device_map[f"model.layers.{i}"]
             inps, outs, attention_mask, position_ids = inps.to(dev), outs.to(dev), attention_mask.to(
                 dev), position_ids.to(dev)

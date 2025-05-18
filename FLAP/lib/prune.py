@@ -557,6 +557,7 @@ def prune_flap(args, model, tokenizer, device=torch.device("cuda:0"), retain_hea
             headdim = layer.mamba.headdim
         else:
             o_proj_key = 'mixer.out_proj'
+            import pdb; pdb.set_trace()
             headdim = layer.mixer.headdim
         subset.update({o_proj_key: find_layers(layer)[o_proj_key]})
         if (hasattr(layer, 'mlp') and layer.mlp is not None) and not args.skip_mlp:

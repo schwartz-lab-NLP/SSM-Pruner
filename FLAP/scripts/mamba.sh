@@ -25,7 +25,8 @@ run_python_command () {
     --structure $5 \
     --nsamples 1024 \
     --skip_mlp \
-    --eval 
+    --eval \
+    --is_orig_smol
     # --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
     # --is_lm_head \
     # --is_mamba \

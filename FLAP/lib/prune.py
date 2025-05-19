@@ -590,7 +590,7 @@ def prune_flap(args, model, tokenizer, device=torch.device("cuda:0"), retain_hea
         for j in range(args.nsamples):
             with torch.no_grad():
                 if residual is None:
-                    if args.is_mamba_in_llama:
+                    if args.is_mamba_in_llama or args.is_orig_smol:
                         position_embeddings = backbone.model.rotary_emb(inps[j].unsqueeze(0), position_ids)
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids, position_embeddings=position_embeddings )
                     else:

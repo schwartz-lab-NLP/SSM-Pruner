@@ -95,6 +95,7 @@ def main():
     parser.add_argument("--is_lm_head", action="store_true", default=False)
     parser.add_argument("--is_mamba_in_llama", action="store_true", default=False)
     parser.add_argument("--is_phi", action="store_true", default=False)
+    parser.add_argument('--is_orig_smol', action="store_true", default=False)
     parser.add_argument("--split_mamba", action="store_true", default=False)
     parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
     parser.add_argument('--nsamples', type=int, default=2048, help='Number of calibration samples.')
@@ -109,7 +110,7 @@ def main():
     parser.add_argument('--save_model', type=str, default=None, help='Path to save the pruned model.')
     parser.add_argument('--skip_mlp', action="store_true", default=False)
     parser.add_argument('--skip_attn', action="store_true", default=False)
-    parser.add_argument('--is_orig_smol', action="store_true", default=False)
+    
     args = parser.parse_args()
     
     # Setting seeds for reproducibility

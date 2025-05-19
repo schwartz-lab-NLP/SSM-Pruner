@@ -144,7 +144,7 @@ def main():
     print("use device ", device)
 
     # Prune the model
-    before_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n)
+    before_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n) if not args.is_orig_smol else sum(p.numel() for n, p in model.named_parameters() if 'attn' in n)
     print("pruning starts")
     if args.prune_method == "flap":
         if args.metrics == 'N/A':
@@ -189,7 +189,7 @@ def main():
     print("*" * 30)
     print(f"model parameter post pruning {sum(p.numel() for p in model.parameters()) / 1000 ** 3:.4f}B")
     print("*" * 30)
-    after_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n)
+    after_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n) if not args.is_orig_smol else sum(p.numel() for n, p in model.named_parameters() if 'attn' in n)
     print(f"number of mixer parameters after pruning: {after_mixer}, before {before_mixer}")
     print(f"compression ratio mixer: {after_mixer / before_mixer}")
     if args.eval:

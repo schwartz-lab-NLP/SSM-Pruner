@@ -553,7 +553,7 @@ def prune_flap(args, model, tokenizer, device=torch.device("cuda:0"), retain_hea
             o_proj_key = 'self_attn.o_proj' if hasattr(layer.self_attn, 'o_proj') else 'self_attn.dense'
             headdim = layer.self_attn.head_dim
         elif args.is_orig_smol:
-            o_proj_key = 'self_attn.o_proj'
+            o_proj_key = 'mixer.self_attn.o_proj'
             headdim = layer.mixer.self_attn.head_dim
         elif hasattr(layer, 'mamba'):
             o_proj_key = 'mamba.out_proj'

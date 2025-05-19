@@ -137,3 +137,88 @@ def generate_text(prompt, device='cuda', model_path="goombalab/Phi-Mamba", token
     # generated_text = tokenizer.decode(generation_output[0], skip_special_tokens=True)
     return generation_output
 
+
+def evaluate_with_lm_eval_harness(
+    model_or_path,
+    benchmarks=["hellaswag", "winogrande", "arc_easy", "arc_challenge", "mmlu"],
+    limit=None,
+    batch_size=1,
+    device="cuda",
+    tokenizer_path=None,
+    no_cache=False,
+    verbose=True
+):
+    """
+    Evaluate a model using lm-eval-harness on specified benchmarks.
+    
+    Args:
+        model_or_path: Either a model instance or a string path to a HuggingFace model
+        benchmarks: List of benchmark names to evaluate on
+        limit: Optional limit on number of examples to use
+        batch_size: Batch size for evaluation
+        device: Device to run evaluation on ('cuda', 'cpu', 'mps')
+        tokenizer_path: Path to tokenizer (if None, uses model_or_path)
+        no_cache: Whether to use cached results
+        verbose: Whether to print evaluation progress
+        
+    Returns:
+        results: Dictionary containing evaluation results
+    """
+    # Prepare the model
+    if isinstance(model_or_path, str):
+        model_name = model_or_path
+    else:
+        model_name = "custom_model"
+        model = model_or_path.to(device).eval()
+    
+    # If tokenizer path not specified, use model path
+    if tokenizer_path is None and isinstance(model_or_path, str):
+        tokenizer_path = model_or_path
+    
+    # Prepare task dict for lm-eval-harness
+    task_dict = {}
+    for benchmark in benchmarks:
+        task_dict[benchmark] = {}
+        if limit:
+            task_dict[benchmark]["limit"] = limit
+    
+    # Set evaluation parameters
+    eval_params = {
+        "model": model_name if isinstance(model_or_path, str) else model,
+        "model_args": None if not isinstance(model_or_path, str) else f"pretrained={model_or_path},use_accelerate=True",
+        "tasks": benchmarks,
+        "batch_size": batch_size,
+        "device": device,
+        "no_cache": no_cache,
+        "verbosity": "INFO" if verbose else "ERROR",
+    }
+    
+    # If custom tokenizer specified
+    if tokenizer_path and isinstance(model_or_path, str):
+        eval_params["model_args"] += f",tokenizer={tokenizer_path}"
+    
+    # Run evaluation
+    print(f"Starting evaluation on benchmarks: {', '.join(benchmarks)}")
+    results = simple_evaluate(**eval_params)
+    
+    # Print summarized results
+    if verbose:
+        for benchmark in benchmarks:
+            if benchmark in results["results"]:
+                print(f"\n{benchmark} results:")
+                for metric, value in results["results"][benchmark].items():
+                    print(f"  {metric}: {value:.4f}")
+    
+    return results
+
+
+if __name__ == "__main__":
+    evaluate_with_lm_eval_harness(
+        model_or_path="HuggingFaceTB/SmolLM2-1.7B",
+        benchmarks=["hellaswag"],
+        limit=100,
+        batch_size=1,
+    )
+
+
+

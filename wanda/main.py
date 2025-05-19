@@ -8,7 +8,8 @@ from importlib.metadata import version
 from MambaInLlama.mamba2.hybrid_wrapper import MambaTransformerHybridModelWrapper
 from original_mamba.mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from phi_mamba.modules.lm_head import LMHeadModel
-from edge.cartesia_ai.llamba.models.llamba_lm_head import LlambaLMHeadModel
+from edge.cartesia_pytorch.cartesia_pytorch.Llamba.llamba import LlambaLMHeadModel
+
 
 from lib.prune import prune_wanda, prune_magnitude, prune_sparsegpt, prune_ablate, check_sparsity, find_layers
 from lib.eval import eval_ppl, eval_zero_shot

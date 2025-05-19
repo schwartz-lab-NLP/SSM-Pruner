@@ -1,5 +1,9 @@
 from typing import Any
 
+import sys
+sys.path.append("edge")
+sys.path.append("phi_mamba")
+
 import torch
 from datasets import load_dataset
 from lm_eval import simple_evaluate

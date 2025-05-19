@@ -195,7 +195,7 @@ def main():
     if args.eval:
         ppl = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
         print(f"ppl on wikitext {ppl}")
-        ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64, device='cpu')
+        ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
         print(f"ppl on lm_eval_harness {ppl}")
         # in_proj_sizes =[l.mixer.in_proj.shape for l in model.backbone.layers]
         # out_proj_sizes =[l.mixer.out_proj.shape for l in model.backbone.layers]

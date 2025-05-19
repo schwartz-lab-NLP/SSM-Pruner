@@ -16,7 +16,7 @@ export PYTHONPATH=".:$PYTHONPATH"
 export PYTHONPATH="./phi_mamba:$PYTHONPATH"
 export PYTHONPATH="./MambaInLlama:$PYTHONPATH"
 export PYTHONPATH="./wanda:$PYTHONPATH"
-export PYTHONPATH="./edge:$PYTHONPATH"
+export PYTHONPATH="./edge/cartesia-pytorch:$PYTHONPATH"
 
 # Define function to run python command
 run_python_command () {

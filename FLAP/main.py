@@ -11,7 +11,7 @@ from phi_mamba.modules.lm_head import LMHeadModel
 
 
 from lib.prune import prune_wanda_sp, prune_flap, prune_magnitude_sp, check_sparsity
-from utils.ppl import evaluate_wikitext
+from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 
 
 # from lib.eval import eval_ppl
@@ -168,6 +168,8 @@ def main():
     if args.eval:
         ppl = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
         print(f"ppl on wikitext {ppl}")
+        ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
+        print(f"ppl on lm_eval_harness {ppl}")
         
     # Save the model
     if args.save_model:
@@ -191,6 +193,8 @@ def main():
     if args.eval:
         ppl = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
         print(f"ppl on wikitext {ppl}")
+        ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, limit=100, batch_size=1)
+        print(f"ppl on lm_eval_harness {ppl}")
         # in_proj_sizes =[l.mixer.in_proj.shape for l in model.backbone.layers]
         # out_proj_sizes =[l.mixer.out_proj.shape for l in model.backbone.layers]
         # print(f"input projection sizes {in_proj_sizes}")

@@ -144,9 +144,9 @@ def generate_text(prompt, device='cuda', model_path="goombalab/Phi-Mamba", token
 
 def evaluate_with_lm_eval_harness(
     model_or_path,
-    benchmarks=["hellaswag", "winogrande", "arc_easy", "arc_challenge", "mmlu"],
+    benchmarks=["lambada_openai","hellaswag","piqa","arc_easy","arc_challenge","winogrande"],
     limit=None,
-    batch_size=1,
+    batch_size=64,
     device="cuda",
     tokenizer_path=None,
     no_cache=False,
@@ -239,6 +239,7 @@ def evaluate_with_lm_eval_harness(
         
         # Print summarized results
         if verbose and results and "results" in results:
+            benchmarks = benchmarks.split(",") if isinstance(benchmarks, str) else benchmarks
             for benchmark in benchmarks:
                 if benchmark in results["results"]:
                     print(f"\n{benchmark} results:")
@@ -272,7 +273,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate a model using lm-eval-harness")
     parser.add_argument("--model", type=str, default="HuggingFaceTB/SmolLM2-1.7B", 
                         help="Path to model or model name on HuggingFace")
-    parser.add_argument("--benchmarks", nargs="+", default=["hellaswag"], 
+    parser.add_argument("--benchmarks", nargs="+", default=["lambada_openai","hellaswag","piqa","arc_easy","arc_challenge","winogrande"], 
                         help="List of benchmarks to evaluate on")
     parser.add_argument("--limit", type=int, default=100, 
                         help="Limit number of examples per benchmark")

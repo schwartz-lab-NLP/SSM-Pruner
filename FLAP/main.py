@@ -59,7 +59,7 @@ def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_
             out_projection.bias = torch.nn.Parameter(torch.zeros(out_projection.weight.shape[0], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
             last_mlp = model.model.layers[i].mlp.down_proj if hasattr(model.model.layers[i].mlp, 'down_proj') else model.model.layers[i].mlp.fc2
             #last_mlp.bias
-            last_mlp.bias = torch.nn.Parameter(torch.zeros_like(last_mlp.weight.shape[0], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
+            last_mlp.bias = torch.nn.Parameter(torch.zeros(last_mlp.weight.shape[0], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
             torch.nn.init.zeros_(out_projection.bias)
             torch.nn.init.zeros_(last_mlp.bias)
         else:

@@ -404,7 +404,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
                 # Add the additional bias to compensate for the loss
                 output_bias = ((attn_mean_inp * ~attn_mask.to(device)) @ output_weight.T)
             ################################### pruning norm ###################################
-            if hasattr(layer.mixer, 'norm'):
+            if hasattr(layer, 'mixer') and hasattr(layer.mixer, 'norm'):
 
                 new_norm_wights = nn.Parameter(layer.mixer.norm.weight[torch.where(attn_mask)[0]])
                 layer.mixer.norm = RMSNormGated(new_norm_wights.shape[0], eps=1e-5,

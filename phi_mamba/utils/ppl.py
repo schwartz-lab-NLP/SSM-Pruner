@@ -150,7 +150,11 @@ def evaluate_with_lm_eval_harness(
     device="cuda",
     tokenizer_path=None,
     no_cache=False,
-    verbose=True
+    cache_dir=None,
+    verbose=True,
+    num_fewshot=0,
+    model_type="hf",  # Default to HuggingFace models
+    use_accelerate=False  # Whether to use Accelerate for model loading
 ):
     """
     Evaluate a model using lm-eval-harness on specified benchmarks.
@@ -162,12 +166,23 @@ def evaluate_with_lm_eval_harness(
         batch_size: Batch size for evaluation
         device: Device to run evaluation on ('cuda', 'cpu', 'mps')
         tokenizer_path: Path to tokenizer (if None, uses model_or_path)
-        no_cache: Whether to use cached results
+        no_cache: Whether to disable caching
+        cache_dir: Directory to use for caching (if None, uses default)
         verbose: Whether to print evaluation progress
+        num_fewshot: Number of examples to use for few-shot learning (0 for zero-shot)
+        model_type: Type of model to use ('hf', 'vllm', 'mamba_ssm', etc.)
+        use_accelerate: Whether to use Accelerate for model loading
         
     Returns:
         results: Dictionary containing evaluation results
     """
+    try:
+        from lm_eval import evaluator
+        simple_evaluate = evaluator.simple_evaluate
+    except ImportError:
+        print("lm-eval-harness not found. Please install with: pip install lm-eval")
+        return None
+        
     # Prepare the model
     if isinstance(model_or_path, str):
         model_name = model_or_path
@@ -179,50 +194,147 @@ def evaluate_with_lm_eval_harness(
     if tokenizer_path is None and isinstance(model_or_path, str):
         tokenizer_path = model_or_path
     
-    # Prepare task dict for lm-eval-harness
-    task_dict = {}
-    for benchmark in benchmarks:
-        task_dict[benchmark] = {}
-        if limit:
-            task_dict[benchmark]["limit"] = limit
+    # Build model_args string without use_accelerate
+    model_args = None
+    if isinstance(model_or_path, str):
+        model_args_parts = [f"pretrained={model_or_path}"]
+        
+        # Only add use_accelerate if specified
+        if use_accelerate:
+            model_args_parts.append("use_accelerate=True")
+            
+        # Add tokenizer if specified
+        if tokenizer_path:
+            model_args_parts.append(f"tokenizer={tokenizer_path}")
+            
+        # Join all parts with commas
+        model_args = ",".join(model_args_parts)
     
-    # Set evaluation parameters
+    # Basic evaluation parameters that are common across versions
     eval_params = {
-        "model": model_name if isinstance(model_or_path, str) else model,
-        "model_args": None if not isinstance(model_or_path, str) else f"pretrained={model_or_path},use_accelerate=True",
+        "model": model_type,  # Specify the model type (hf, vllm, etc.)
+        "model_args": model_args,
         "tasks": benchmarks,
+        "num_fewshot": num_fewshot,
         "batch_size": batch_size,
         "device": device,
-        "no_cache": no_cache,
-        "verbosity": "INFO" if verbose else "ERROR",
+        "limit": limit,
     }
     
-    # If custom tokenizer specified
-    if tokenizer_path and isinstance(model_or_path, str):
-        eval_params["model_args"] += f",tokenizer={tokenizer_path}"
+    # Handle use_cache parameter
+    import inspect
+    sig = inspect.signature(simple_evaluate)
+    if 'use_cache' in sig.parameters:
+        # use_cache expects a path string or None, not a boolean
+        cache_path = None if no_cache else (cache_dir or "lm_cache")
+        eval_params["use_cache"] = cache_path
     
     # Run evaluation
     print(f"Starting evaluation on benchmarks: {', '.join(benchmarks)}")
-    results = simple_evaluate(**eval_params)
-    
-    # Print summarized results
-    if verbose:
-        for benchmark in benchmarks:
-            if benchmark in results["results"]:
-                print(f"\n{benchmark} results:")
-                for metric, value in results["results"][benchmark].items():
-                    print(f"  {metric}: {value:.4f}")
-    
-    return results
+    try:
+        if verbose:
+            print(f"Using parameters: {eval_params}")
+        
+        results = simple_evaluate(**eval_params)
+        
+        # Print summarized results
+        if verbose and results and "results" in results:
+            for benchmark in benchmarks:
+                if benchmark in results["results"]:
+                    print(f"\n{benchmark} results:")
+                    for metric, value in results["results"][benchmark].items():
+                        # Format value based on its type
+                        if isinstance(value, (float, int)):
+                            print(f"  {metric}: {value:.4f}")
+                        else:
+                            print(f"  {metric}: {value}")
+        
+        return results
+    except Exception as e:
+        # Handle any errors gracefully
+        import traceback
+        traceback.print_exc()
+        
+        print(f"Error running evaluation: {e}")
+        print("This could be due to version mismatch in lm-eval-harness.")
+        
+        # Print actual supported parameters
+        print("\nSupported parameters for simple_evaluate:")
+        for param in sig.parameters:
+            print(f"  - {param}")
+            
+        return None
 
 
 if __name__ == "__main__":
-    evaluate_with_lm_eval_harness(
-        model_or_path="HuggingFaceTB/SmolLM2-1.7B",
-        benchmarks=["hellaswag"],
-        limit=100,
-        batch_size=1,
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Evaluate a model using lm-eval-harness")
+    parser.add_argument("--model", type=str, default="HuggingFaceTB/SmolLM2-1.7B", 
+                        help="Path to model or model name on HuggingFace")
+    parser.add_argument("--benchmarks", nargs="+", default=["hellaswag"], 
+                        help="List of benchmarks to evaluate on")
+    parser.add_argument("--limit", type=int, default=100, 
+                        help="Limit number of examples per benchmark")
+    parser.add_argument("--batch-size", type=int, default=1, 
+                        help="Batch size for evaluation")
+    parser.add_argument("--device", type=str, default="cuda", 
+                        help="Device to run evaluation on (cuda, cpu, mps)")
+    parser.add_argument("--num-fewshot", type=int, default=0, 
+                        help="Number of examples to use for few-shot learning")
+    parser.add_argument("--model-type", type=str, default="hf", 
+                        help="Type of model to use (hf, vllm, mamba_ssm, etc.)")
+    parser.add_argument("--use-accelerate", action="store_true", 
+                        help="Whether to use Accelerate for model loading")
+    parser.add_argument("--no-cache", action="store_true",
+                        help="Disable caching of model outputs")
+    parser.add_argument("--cache-dir", type=str, default=None,
+                        help="Directory to use for caching (if None, uses default)")
+    
+    args = parser.parse_args()
+    
+    # Detect available device if cuda not available
+    import torch
+    if args.device == "cuda" and not torch.cuda.is_available():
+        if torch.backends.mps.is_available():
+            args.device = "mps"
+            print("CUDA not available, using MPS device")
+        else:
+            args.device = "cpu"
+            print("CUDA and MPS not available, using CPU")
+    
+    print(f"Evaluating model {args.model} on benchmarks {args.benchmarks}")
+    print(f"Using device: {args.device}")
+    print(f"Model type: {args.model_type}")
+    print(f"Using accelerate: {args.use_accelerate}")
+    print(f"Caching: {'disabled' if args.no_cache else 'enabled'}")
+    
+    results = evaluate_with_lm_eval_harness(
+        model_or_path=args.model,
+        benchmarks=args.benchmarks,
+        limit=args.limit,
+        batch_size=args.batch_size,
+        device=args.device,
+        num_fewshot=args.num_fewshot,
+        model_type=args.model_type,
+        use_accelerate=args.use_accelerate,
+        no_cache=args.no_cache,
+        cache_dir=args.cache_dir,
     )
+    
+    if results is None:
+        print("Evaluation failed. Please check errors above.")
+    else:
+        print("\nFull results:")
+        if "results" in results:
+            for benchmark, metrics in results["results"].items():
+                print(f"\n{benchmark}:")
+                for metric, value in metrics.items():
+                    # Format value based on its type
+                    if isinstance(value, (float, int)):
+                        print(f"  {metric}: {value:.4f}")
+                    else:
+                        print(f"  {metric}: {value}")
 
 
 

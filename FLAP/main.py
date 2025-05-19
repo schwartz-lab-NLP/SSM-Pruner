@@ -55,6 +55,7 @@ def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_
     layers = backbone.layers if hasattr(backbone, "layers") else backbone.model.layers
     for i in range(len(layers)):
         if not is_mamba:
+            import pdb; pdb.set_trace()
             out_projection  = model.model.layers[i].self_attn.o_proj if hasattr(model.model.layers[i].self_attn, 'o_proj') else model.model.layers[i].self_attn.dense
             out_projection.bias = torch.nn.Parameter(torch.zeros(out_projection.shape[-1], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
             last_mlp = model.model.layers[i].mlp.down_proj if hasattr(model.model.layers[i].mlp, 'down_proj') else model.model.layers[i].mlp.fc2

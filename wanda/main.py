@@ -33,7 +33,7 @@ def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=Fals
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
         elif is_llamba:
-            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16)
+            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16).to('cuda')
         else:
             model = MambaLMHeadModel.from_pretrained(model_name, device='cuda', dtype=torch.bfloat16)
             if split_mamba:
@@ -118,7 +118,7 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
 
         tokenizer_path = args.model
-    import pdb; pdb.set_trace()
+    
     device = torch.device("cuda:0")
     if "30b" in args.model or "65b" in args.model:  # for 30b and 65b we use device_map to load onto multiple A6000 GPUs, thus the processing here.
         device = model.hf_device_map["lm_head"]

@@ -209,6 +209,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
         None: This function modifies the layer in-place and doesn't return anything.
     """
     repeated_group_size = None
+    dstate = None
     if hasattr(layer, 'mixer') and hasattr(layer.mixer, 'in_proj'):
         in_proj_indices = layer.mixer.get_in_proj_indices()
         z_start, z_end = in_proj_indices['z']
@@ -238,7 +239,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
         if attn_mask is not None:
             retain_heads = torch.count_nonzero(attn_mask)
             attn_mask = attn_mask.repeat_interleave(headdim)
-            if headdim != dstate:
+            if dstate is not None and headdim != dstate:
                 attn_mask_dstate = attn_mask.repeat_interleave(dstate)
             if hasattr(layer, 'self_attn'):
                 # Apply the mask to the query, key and value projection weights
@@ -289,7 +290,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
             retain_heads = torch.count_nonzero(attn_mask)
             attn_mask_pre_repeat = attn_mask
             attn_mask = attn_mask.repeat_interleave(headdim)  # 128
-            if headdim != dstate:
+            if dstate is not None and headdim != dstate:
                 attn_mask_dstate = attn_mask_pre_repeat.repeat_interleave(dstate)
             else:
                 attn_mask_dstate = attn_mask

@@ -8,6 +8,7 @@ from importlib.metadata import version
 from MambaInLlama.mamba2.hybrid_wrapper import MambaTransformerHybridModelWrapper
 from original_mamba.mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from phi_mamba.modules.lm_head import LMHeadModel
+from cartesia_ai.llamba.models.llamba_lm_head import LlambaLMHeadModel
 
 from lib.prune import prune_wanda, prune_magnitude, prune_sparsegpt, prune_ablate, check_sparsity, find_layers
 from lib.eval import eval_ppl, eval_zero_shot
@@ -20,7 +21,7 @@ print('# of gpus: ', torch.cuda.device_count())
 
 
 def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=False, is_mamba_in_llama=False,
-            split_mamba=False):
+            split_mamba=False, is_llamba=False):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
@@ -30,6 +31,8 @@ def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=Fals
             ).to(torch.bfloat16)
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
+        elif is_llamba:
+            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16)
         else:
             model = MambaLMHeadModel.from_pretrained(model_name, device='cuda', dtype=torch.bfloat16)
             if split_mamba:
@@ -61,6 +64,7 @@ def main():
     parser.add_argument("--is_mamba", action="store_true", default=False)
     parser.add_argument("--is_lm_head", action="store_true", default=False)
     parser.add_argument("--is_mamba_in_llama", action="store_true", default=False)
+    parser.add_argument("--is_llamba", action="store_true", default=False)
     parser.add_argument('--s_prune', action="store_true", default=False, help='structural pruning.')
     parser.add_argument("--split_mamba", action="store_true", default=False)
     parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
@@ -103,6 +107,9 @@ def main():
         elif args.is_mamba_in_llama:
             tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
             tokenizer_path = args.model
+        elif args.is_llamba:
+            tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-1B")
+            tokenizer_path = "meta-llama/Llama-3.2-1B"
         else:
             tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-neox-20b')
             tokenizer_path = 'EleutherAI/gpt-neox-20b'
@@ -110,7 +117,7 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
 
         tokenizer_path = args.model
-
+    import pdb; pdb.set_trace()
     device = torch.device("cuda:0")
     if "30b" in args.model or "65b" in args.model:  # for 30b and 65b we use device_map to load onto multiple A6000 GPUs, thus the processing here.
         device = model.hf_device_map["lm_head"]

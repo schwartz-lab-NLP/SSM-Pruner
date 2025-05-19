@@ -98,7 +98,7 @@ def main():
 
     print(f"loading llm model {args.model}")
     model = get_llm(args.model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                    is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba)
+                    is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba)
     model.eval()
     if args.is_mamba:
         if args.is_lm_head:
@@ -190,7 +190,7 @@ def main():
             model.save_pretrained(args.save_model)
         # tokenizer.save_pretrained(args.save_model)
         model = get_llm(args.save_model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba)
+                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba)
     ppl_test = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
     print(f"wikitext perplexity loaded {ppl_test}")
 

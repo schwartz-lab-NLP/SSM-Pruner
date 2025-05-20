@@ -29,7 +29,7 @@ run_python_command () {
     --nsamples 1024 \
     --skip_mlp \
     --eval \
-    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
+    --save_model "llm_weights/${1}_p${2}_${4}_${5}_LLAMBA1B" \
     --is_lm_head \
     --is_mamba \
     # --is_orig_smol

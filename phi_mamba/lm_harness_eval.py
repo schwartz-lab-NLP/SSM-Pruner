@@ -147,7 +147,7 @@ class LLAMBA1BEvalWrapper(BaseEvalWrapper):
     def __init__(self, pretrained=None, peft=None, **kwargs):
         path = os.environ.get("EVAL_PATH", ".")
         
-        _model = LMHeadModel.from_pretrained(path, strict=True, torch_dtype=torch.bfloat16)
+        _model = LMHeadModel.from_pretrained(path, strict=False, torch_dtype=torch.bfloat16)
         _model.tie_weights()
         if peft is not None:
             _model = PeftModel.from_pretrained(_model, peft)

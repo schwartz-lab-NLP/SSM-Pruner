@@ -13,7 +13,7 @@ from cartesia_pytorch.Llamba.llamba import LlambaLMHeadModel
 
 from lib.prune import prune_wanda, prune_magnitude, prune_sparsegpt, prune_ablate, check_sparsity, find_layers
 from lib.eval import eval_ppl, eval_zero_shot
-from utils.ppl import evaluate_wikitext
+from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 
 print('torch', version('torch'))
 print('transformers', version('transformers'))
@@ -22,7 +22,7 @@ print('# of gpus: ', torch.cuda.device_count())
 
 
 def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=False, is_mamba_in_llama=False,
-            split_mamba=False, is_llamba=False):
+            split_mamba=False, is_llamba=False, llamba_safe_serialization=True):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
@@ -33,7 +33,7 @@ def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=Fals
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
         elif is_llamba:
-            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16).to('cuda')
+            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16, safe_serialization=llamba_safe_serialization).to('cuda')
         else:
             model = MambaLMHeadModel.from_pretrained(model_name, device='cuda', dtype=torch.bfloat16)
             if split_mamba:
@@ -187,12 +187,13 @@ def main():
             model.save_config(args.save_model)
             model.model.save_pretrained(args.save_model, safe_serialization=False, max_shard_size="50GB")
         else:
-            model.save_pretrained(args.save_model) if not args.is_llamba else model.save_pretrained(args.save_model, safe_serialization=True, max_shard_size="50GB")
+            model.save_pretrained(args.save_model) ##if not args.is_llamba else model.save_pretrained(args.save_model, safe_serialization=True, max_shard_size="50GB")
         # tokenizer.save_pretrained(args.save_model)
         model = get_llm(args.save_model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba)
+                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba, llamba_safe_serialization=False)
     ppl_test = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
     print(f"wikitext perplexity loaded {ppl_test}")
+    ppl_test = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
 
 
 if __name__ == '__main__':

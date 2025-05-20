@@ -6,7 +6,7 @@
 # model="schwartz-lab/Smol2-Mamba-1.9B"
 # model="HuggingFaceTB/SmolLM2-1.7B"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
-model="cartesia-ai/Llamba-1B"
+model="LLAMBA_1B"
 
 cuda_device=0
 
@@ -27,8 +27,9 @@ run_python_command () {
     --sparsity_type $2 \
     --save $3 \
     --save_model $4 \
-    --is_llamba \
     --is_mamba \
+    --is_lm_head \
+    # --is_llamba \
     
     # --is_mamba_in_llama 
 #    --eval_zero_shot \
@@ -58,7 +59,7 @@ run_python_command () {
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_025" "out/mamba/unstructured/wanda/SMOL19_05/model/" 0.5
 
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
-run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/LLAMBA_05" "out/mamba/unstructured/wanda/LLAMBA_05/model/" 0.5
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05/model/" 0.5
 
 
 

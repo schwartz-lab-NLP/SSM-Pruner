@@ -506,7 +506,7 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
     @staticmethod
     def from_pretrained(
             pretrained_model_name_or_path: Union[str, os.PathLike],
-            strict=False, # TODO: remove this
+            strict=True,
             *model_args,
             **kwargs
     ) -> T:

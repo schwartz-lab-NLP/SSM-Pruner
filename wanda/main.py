@@ -22,7 +22,7 @@ print('# of gpus: ', torch.cuda.device_count())
 
 
 def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=False, is_mamba_in_llama=False,
-            split_mamba=False, is_llamba=False, llamba_safe_serialization=True, strict=True):
+            split_mamba=False, is_llamba=False, llamba_safe_serialization=True, strict=False):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(

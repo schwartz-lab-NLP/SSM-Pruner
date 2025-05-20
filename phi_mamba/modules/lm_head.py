@@ -506,6 +506,7 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
     @staticmethod
     def from_pretrained(
             pretrained_model_name_or_path: Union[str, os.PathLike],
+            strict=True,
             *model_args,
             **kwargs
     ) -> T:
@@ -522,7 +523,7 @@ class LMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
             model_path = os.path.join(pretrained_model_name_or_path, "pytorch_model.bin")
             state_dict = torch.load(model_path)
             state_dict = LMHeadModel._convert_state_dict(state_dict)
-            model.load_state_dict(state_dict)
+            model.load_state_dict(state_dict, strict=strict)
             return model
         else:
             if "config_path" in kwargs:

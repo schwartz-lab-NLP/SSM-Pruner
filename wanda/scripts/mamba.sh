@@ -29,6 +29,7 @@ run_python_command () {
     --save_model $4 \
     --is_llamba \
     --is_mamba \
+    
     # --is_mamba_in_llama 
 #    --eval_zero_shot \
 #    --lm_eval_name auto-lm-head

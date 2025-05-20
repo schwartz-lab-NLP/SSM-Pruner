@@ -196,7 +196,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids)
                 else:
                     tmp_out, residual = layer(inps[j].unsqueeze(0), residual, attention_mask=attention_mask, position_ids=position_ids)
-                outs[j] = tmp_out[0] if not args.is_lm_head else tmp_out['hidden_states']
+                outs[j] = tmp_out[0] if (not args.is_lm_head and not args.is_llamba) else tmp_out['hidden_states']
         for h in handles:
             h.remove()
 
@@ -292,7 +292,7 @@ def prune_wanda(args, model, tokenizer, device=torch.device("cuda:0"), prune_n=0
                 else:
                     tmp_out, residual = layer(inps[j].unsqueeze(0), residual, attention_mask=attention_mask, position_ids=position_ids)
                 
-                outs[j] = tmp_out[0] if not args.is_lm_head else tmp_out['hidden_states']
+                outs[j] = tmp_out[0] if (not args.is_lm_head and not args.is_llamba) else tmp_out['hidden_states']
         inps, outs = outs, inps
     if hasattr(model.config, "use_cache"):
         model.config.use_cache = use_cache
@@ -377,7 +377,7 @@ def prune_sparsegpt(args, model, tokenizer, dev, prune_n=0, prune_m=0):
             else:
                 tmp_out, residual = layer(inps[j].unsqueeze(0), residual, attention_mask=attention_mask,
                                           position_ids=position_ids)
-            outs[j] = tmp_out[0] if not args.is_lm_head else tmp_out['hidden_states']
+            outs[j] = tmp_out[0] if (not args.is_lm_head and not args.is_llamba) else tmp_out['hidden_states']
 
         for h in handles:
             h.remove()
@@ -395,7 +395,7 @@ def prune_sparsegpt(args, model, tokenizer, dev, prune_n=0, prune_m=0):
             else:
                 tmp_out, residual = layer(inps[j].unsqueeze(0), residual, attention_mask=attention_mask,
                                           position_ids=position_ids)
-            outs[j] = tmp_out[0] if not args.is_lm_head else tmp_out['hidden_states']
+            outs[j] = tmp_out[0] if (not args.is_lm_head and not args.is_llamba) else tmp_out['hidden_states']
 
         layers[i] = layer 
         torch.cuda.empty_cache()

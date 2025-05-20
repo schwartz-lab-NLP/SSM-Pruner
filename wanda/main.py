@@ -187,7 +187,7 @@ def main():
             model.save_config(args.save_model)
             model.model.save_pretrained(args.save_model, safe_serialization=False, max_shard_size="50GB")
         else:
-            model.save_pretrained(args.save_model, safe_serialization=False, max_shard_size="50GB")
+            model.save_pretrained(args.save_model)
         # tokenizer.save_pretrained(args.save_model)
         model = get_llm(args.save_model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
                         is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba, llamba_safe_serialization=False)

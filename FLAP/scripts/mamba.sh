@@ -15,6 +15,8 @@ export CUDA_VISIBLE_DEVICES=$cuda_device
 export PYTHONPATH=".:$PYTHONPATH"
 export PYTHONPATH="./phi_mamba:$PYTHONPATH"
 export PYTHONPATH="./MambaInLlama:$PYTHONPATH"
+export PYTHONPATH="./edge/cartesia-pytorch:$PYTHONPATH"
+
 # Define function to run python command
 run_python_command () {
     python FLAP/main.py \

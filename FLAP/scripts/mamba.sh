@@ -5,7 +5,8 @@
 # model="schwartz-lab/SmolLM2-1.7B_lm_head"
 #model="goombalab/Phi-Mamba"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
-model="HuggingFaceTB/SmolLM2-1.7B"
+# model="HuggingFaceTB/SmolLM2-1.7B"
+model="LLAMBA_1B"
 
 cuda_device=0
 
@@ -26,10 +27,12 @@ run_python_command () {
     --nsamples 1024 \
     --skip_mlp \
     --eval \
-    --is_orig_smol
-    # --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
-    # --is_lm_head \
-    # --is_mamba \
+    --save_model "llm_weights/${1}_p${2}_${4}_${5}_MAMBA2" \
+    --is_lm_head \
+    --is_mamba \
+    # --is_orig_smol
+    
+    
     # --is_orig_smol 
     # --is_mamba_in_llama  # uncomment for JunxiongWang/Llama3.2-Mamba2-3B-dpo
 #    --skip_attn \

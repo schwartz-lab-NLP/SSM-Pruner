@@ -21,13 +21,13 @@ from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 # print('accelerate', version('accelerate'))
 # print('# of gpus: ', torch.cuda.device_count())
 
-def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False):
+def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False, strict=True):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
                 model_name,
                 attn_type="flash_attention_2" if torch.is_autocast_enabled() else "eager",
-                strict=True,
+                strict=strict,
             ).to(torch.bfloat16)
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
@@ -184,7 +184,7 @@ def main():
             model.save_pretrained_distributed(args.save_model, is_main_process=True, update_config=True)
         else:
             model.save_pretrained(args.save_model)
-        model = get_llm(args.save_model, args.is_mamba, args.is_lm_head, args.split_mamba, args.is_phi, args.is_mamba_in_llama, args.skip_mlp)
+        model = get_llm(args.save_model, args.is_mamba, args.is_lm_head, args.split_mamba, args.is_phi, args.is_mamba_in_llama, args.skip_mlp, strict=False)
 
     print("*" * 30)
     print(f"model parameter post pruning {sum(p.numel() for p in model.parameters()) / 1000 ** 3:.4f}B")

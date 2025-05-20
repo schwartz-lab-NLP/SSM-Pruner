@@ -22,13 +22,13 @@ print('# of gpus: ', torch.cuda.device_count())
 
 
 def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=False, is_mamba_in_llama=False,
-            split_mamba=False, is_llamba=False, llamba_safe_serialization=True):
+            split_mamba=False, is_llamba=False, llamba_safe_serialization=True, strict=True):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
                 model_name,
                 attn_type="flash_attention_2" if torch.is_autocast_enabled() else "eager",
-                strict=True,
+                strict=strict,
             ).to(torch.bfloat16)
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
@@ -190,7 +190,7 @@ def main():
             model.save_pretrained(args.save_model)
         # tokenizer.save_pretrained(args.save_model)
         model = get_llm(args.save_model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba, llamba_safe_serialization=False)
+                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba, llamba_safe_serialization=False, strict=False)
     ppl_test = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
     print(f"wikitext perplexity loaded {ppl_test}")
     ppl_test = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)

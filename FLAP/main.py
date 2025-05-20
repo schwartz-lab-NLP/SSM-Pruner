@@ -21,7 +21,7 @@ from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 # print('accelerate', version('accelerate'))
 # print('# of gpus: ', torch.cuda.device_count())
 
-def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False, strict=True):
+def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False, strict=False):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(

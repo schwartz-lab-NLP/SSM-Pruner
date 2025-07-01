@@ -3,8 +3,8 @@
 # Set common variables
 #model="goombalab/Phi-Mamba"
 #model="state-spaces/mamba2-2.7b"
-# model="schwartz-lab/Smol2-Mamba-1.9B"
-model="HuggingFaceTB/SmolLM2-1.7B"
+model="schwartz-lab/Smol2-Mamba-1.9B"
+# model="HuggingFaceTB/SmolLM2-1.7B"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
 
 cuda_device=0
@@ -25,9 +25,10 @@ run_python_command () {
     --sparsity_type $2 \
     --save $3 \
     --save_model $4 \
-    --is_mamba_in_llama 
-    # --is_mamba \
-    # --is_lm_head \
+    --is_mamba \
+    --is_lm_head 
+    # --is_mamba_in_llama 
+    
 #    --eval_zero_shot \
 #    --lm_eval_name auto-lm-head
 
@@ -52,10 +53,13 @@ run_python_command () {
 #echo "--------------------------------------------------------------------------------------"
 #run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/phi_05" "out/mamba/unstructured/wanda/phi_05/model/" 0.5
 
-# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_025" "out/mamba/unstructured/wanda/SMOL19_05/model/" 0.5
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_06" "out/mamba/unstructured/wanda/SMOL19_06/model/" 0.6
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_07" "out/mamba/unstructured/wanda/SMOL19_07/model/" 0.7
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_08" "out/mamba/unstructured/wanda/SMOL19_08/model/" 0.8
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_09" "out/mamba/unstructured/wanda/SMOL19_09/model/" 0.9
 
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
-run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_05" "out/mamba/unstructured/wanda/SMOL17_05/model/" 0.5
+# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_05" "out/mamba/unstructured/wanda/SMOL17_05/model/" 0.5
 
 
 

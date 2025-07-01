@@ -8,10 +8,12 @@ from importlib.metadata import version
 from MambaInLlama.mamba2.hybrid_wrapper import MambaTransformerHybridModelWrapper
 from original_mamba.mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from phi_mamba.modules.lm_head import LMHeadModel
+from cartesia_pytorch.Llamba.llamba import LlambaLMHeadModel
+
 
 from lib.prune import prune_wanda, prune_magnitude, prune_sparsegpt, prune_ablate, check_sparsity, find_layers
 from lib.eval import eval_ppl, eval_zero_shot
-from utils.ppl import evaluate_wikitext
+from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 
 print('torch', version('torch'))
 print('transformers', version('transformers'))
@@ -20,16 +22,18 @@ print('# of gpus: ', torch.cuda.device_count())
 
 
 def get_llm(model_name, cache_dir="llm_weights", is_mamba=False, is_lm_head=False, is_mamba_in_llama=False,
-            split_mamba=False):
+            split_mamba=False, is_llamba=False, llamba_safe_serialization=True, strict=False):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
                 model_name,
                 attn_type="flash_attention_2" if torch.is_autocast_enabled() else "eager",
-                strict=True,
+                strict=strict,
             ).to(torch.bfloat16)
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
+        elif is_llamba:
+            model = LlambaLMHeadModel.from_pretrained(model_name, torch_dtype=torch.bfloat16, use_safetensors=llamba_safe_serialization).to('cuda')
         else:
             model = MambaLMHeadModel.from_pretrained(model_name, device='cuda', dtype=torch.bfloat16)
             if split_mamba:
@@ -61,6 +65,7 @@ def main():
     parser.add_argument("--is_mamba", action="store_true", default=False)
     parser.add_argument("--is_lm_head", action="store_true", default=False)
     parser.add_argument("--is_mamba_in_llama", action="store_true", default=False)
+    parser.add_argument("--is_llamba", action="store_true", default=False)
     parser.add_argument('--s_prune', action="store_true", default=False, help='structural pruning.')
     parser.add_argument("--split_mamba", action="store_true", default=False)
     parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
@@ -93,7 +98,7 @@ def main():
 
     print(f"loading llm model {args.model}")
     model = get_llm(args.model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                    is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba)
+                    is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba)
     model.eval()
     if args.is_mamba:
         if args.is_lm_head:
@@ -103,6 +108,9 @@ def main():
         elif args.is_mamba_in_llama:
             tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
             tokenizer_path = args.model
+        elif args.is_llamba:
+            tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-3.2-1B")
+            tokenizer_path = "meta-llama/Llama-3.2-1B"
         else:
             tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-neox-20b')
             tokenizer_path = 'EleutherAI/gpt-neox-20b'
@@ -110,7 +118,7 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
 
         tokenizer_path = args.model
-
+    
     device = torch.device("cuda:0")
     if "30b" in args.model or "65b" in args.model:  # for 30b and 65b we use device_map to load onto multiple A6000 GPUs, thus the processing here.
         device = model.hf_device_map["lm_head"]
@@ -182,10 +190,11 @@ def main():
             model.save_pretrained(args.save_model)
         # tokenizer.save_pretrained(args.save_model)
         model = get_llm(args.save_model, args.cache_dir, is_mamba=args.is_mamba, is_lm_head=args.is_lm_head,
-                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba)
+                        is_mamba_in_llama=args.is_mamba_in_llama, split_mamba=args.split_mamba, is_llamba=args.is_llamba, llamba_safe_serialization=False, strict=False)
     ppl_test = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
     print(f"wikitext perplexity loaded {ppl_test}")
-
+    ppl_test = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
+    print(f"lm eval harness perplexity loaded {ppl_test}")
 
 if __name__ == '__main__':
     main()

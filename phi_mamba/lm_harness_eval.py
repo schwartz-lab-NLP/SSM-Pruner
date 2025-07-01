@@ -140,6 +140,20 @@ class Smol17LMheadEvalWrapper(BaseEvalWrapper):
         super().__init__(_model, tokenizer="HuggingFaceTB/SmolLM2-1.7B", **kwargs)
         self._model.to(self._device).to(self._dtype).eval()
 
+@register_model("lm-head-llamba1b")
+class LLAMBA1BEvalWrapper(BaseEvalWrapper):
+    AUTO_MODEL_CLASS = transformers.AutoModelForCausalLM
+
+    def __init__(self, pretrained=None, peft=None, **kwargs):
+        path = os.environ.get("EVAL_PATH", ".")
+        
+        _model = LMHeadModel.from_pretrained(path, strict=False, torch_dtype=torch.bfloat16)
+        _model.tie_weights()
+        if peft is not None:
+            _model = PeftModel.from_pretrained(_model, peft)
+            print('PEFT PATH IN USE ------------------->', peft)
+        super().__init__(_model, tokenizer="meta-llama/Llama-3.2-1B", **kwargs)
+        self._model.to(self._device).to(self._dtype).eval()
 
 @register_model("lm-head-smol17-hf")
 class Smol17LMheadHFEvalWrapper(BaseEvalWrapper):

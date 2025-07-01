@@ -209,6 +209,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
         None: This function modifies the layer in-place and doesn't return anything.
     """
     repeated_group_size = None
+    dstate = None
     if hasattr(layer, 'mixer') and hasattr(layer.mixer, 'in_proj'):
         in_proj_indices = layer.mixer.get_in_proj_indices()
         z_start, z_end = in_proj_indices['z']
@@ -238,7 +239,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
         if attn_mask is not None:
             retain_heads = torch.count_nonzero(attn_mask)
             attn_mask = attn_mask.repeat_interleave(headdim)
-            if headdim != dstate:
+            if dstate is not None and headdim != dstate:
                 attn_mask_dstate = attn_mask.repeat_interleave(dstate)
             if hasattr(layer, 'self_attn'):
                 # Apply the mask to the query, key and value projection weights
@@ -289,7 +290,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
             retain_heads = torch.count_nonzero(attn_mask)
             attn_mask_pre_repeat = attn_mask
             attn_mask = attn_mask.repeat_interleave(headdim)  # 128
-            if headdim != dstate:
+            if dstate is not None and headdim != dstate:
                 attn_mask_dstate = attn_mask_pre_repeat.repeat_interleave(dstate)
             else:
                 attn_mask_dstate = attn_mask
@@ -403,7 +404,7 @@ def compress(layer, attn_mask, mlp_mask, attn_mean_inp, mlp_mean_inp, device, bi
                 # Add the additional bias to compensate for the loss
                 output_bias = ((attn_mean_inp * ~attn_mask.to(device)) @ output_weight.T)
             ################################### pruning norm ###################################
-            if hasattr(layer.mixer, 'norm'):
+            if hasattr(layer, 'mixer') and hasattr(layer.mixer, 'norm'):
 
                 new_norm_wights = nn.Parameter(layer.mixer.norm.weight[torch.where(attn_mask)[0]])
                 layer.mixer.norm = RMSNormGated(new_norm_wights.shape[0], eps=1e-5,
@@ -552,12 +553,14 @@ def prune_flap(args, model, tokenizer, device=torch.device("cuda:0"), retain_hea
         elif hasattr(layer, 'self_attn') or (hasattr(layer, 'mixer') and args.is_mamba_in_llama):
             o_proj_key = 'self_attn.o_proj' if hasattr(layer.self_attn, 'o_proj') else 'self_attn.dense'
             headdim = layer.self_attn.head_dim
+        elif args.is_orig_smol:
+            o_proj_key = 'mixer.self_attn.o_proj'
+            headdim = layer.mixer.self_attn.head_dim
         elif hasattr(layer, 'mamba'):
             o_proj_key = 'mamba.out_proj'
             headdim = layer.mamba.headdim
         else:
             o_proj_key = 'mixer.out_proj'
-            import pdb; pdb.set_trace()
             headdim = layer.mixer.headdim
         subset.update({o_proj_key: find_layers(layer)[o_proj_key]})
         if (hasattr(layer, 'mlp') and layer.mlp is not None) and not args.skip_mlp:
@@ -588,8 +591,9 @@ def prune_flap(args, model, tokenizer, device=torch.device("cuda:0"), retain_hea
         for j in range(args.nsamples):
             with torch.no_grad():
                 if residual is None:
-                    if args.is_mamba_in_llama:
-                        position_embeddings = backbone.model.rotary_emb(inps[j].unsqueeze(0), position_ids)
+                    if args.is_mamba_in_llama or args.is_orig_smol:
+                        model_ = backbone.model if hasattr(backbone, "model") else backbone
+                        position_embeddings = model_.rotary_emb(inps[j].unsqueeze(0), position_ids)
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids, position_embeddings=position_embeddings )
                     else:
                         tmp_out = layer(inps[j].unsqueeze(0), attention_mask=attention_mask, position_ids=position_ids)

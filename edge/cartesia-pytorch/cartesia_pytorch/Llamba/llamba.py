@@ -79,6 +79,8 @@ class LlambaLMHeadModel(nn.Module, GenerationMixin, PyTorchModelHubMixin):
         return_logits=True,
         inference_params=None,
         num_last_tokens=0,
+        attention_mask=None,
+        **kwargs,
     ):
         """
         Args:

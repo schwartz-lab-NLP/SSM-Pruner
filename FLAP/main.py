@@ -11,7 +11,7 @@ from phi_mamba.modules.lm_head import LMHeadModel
 
 
 from lib.prune import prune_wanda_sp, prune_flap, prune_magnitude_sp, check_sparsity
-from utils.ppl import evaluate_wikitext
+from utils.ppl import evaluate_wikitext, evaluate_with_lm_eval_harness
 
 
 # from lib.eval import eval_ppl
@@ -21,13 +21,13 @@ from utils.ppl import evaluate_wikitext
 # print('accelerate', version('accelerate'))
 # print('# of gpus: ', torch.cuda.device_count())
 
-def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False):
+def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_phi=False, is_mamba_in_llama=False, skip_mlp=False, strict=False):
     if is_mamba:
         if is_lm_head:
             model = LMHeadModel.from_pretrained(
                 model_name,
                 attn_type="flash_attention_2" if torch.is_autocast_enabled() else "eager",
-                strict=True,
+                strict=strict,
             ).to(torch.bfloat16)
         elif is_mamba_in_llama:
             model = MambaTransformerHybridModelWrapper.from_pretrained(model_name, torch_dtype=torch.bfloat16)
@@ -56,9 +56,10 @@ def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_
     for i in range(len(layers)):
         if not is_mamba:
             out_projection  = model.model.layers[i].self_attn.o_proj if hasattr(model.model.layers[i].self_attn, 'o_proj') else model.model.layers[i].self_attn.dense
-            out_projection.bias = torch.nn.Parameter(torch.zeros(out_projection.shape[-1], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
+            out_projection.bias = torch.nn.Parameter(torch.zeros(out_projection.weight.shape[0], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
             last_mlp = model.model.layers[i].mlp.down_proj if hasattr(model.model.layers[i].mlp, 'down_proj') else model.model.layers[i].mlp.fc2
-            last_mlp.bias = torch.nn.Parameter(torch.zeros_like(last_mlp.bias, device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
+            #last_mlp.bias
+            last_mlp.bias = torch.nn.Parameter(torch.zeros(last_mlp.weight.shape[0], device='cpu', dtype=torch.bfloat16))  # 或 'cuda'
             torch.nn.init.zeros_(out_projection.bias)
             torch.nn.init.zeros_(last_mlp.bias)
         else:
@@ -89,11 +90,12 @@ def get_llm(model_name, is_mamba=False, is_lm_head=False, split_mamba=False, is_
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', type=str, help='LLaMA model')    # Huggingface model name
+    parser.add_argument('--model', type=str, help=' model')    # Huggingface model name
     parser.add_argument("--is_mamba", action="store_true", default=False)
     parser.add_argument("--is_lm_head", action="store_true", default=False)
     parser.add_argument("--is_mamba_in_llama", action="store_true", default=False)
     parser.add_argument("--is_phi", action="store_true", default=False)
+    parser.add_argument('--is_orig_smol', action="store_true", default=False)
     parser.add_argument("--split_mamba", action="store_true", default=False)
     parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
     parser.add_argument('--nsamples', type=int, default=2048, help='Number of calibration samples.')
@@ -108,6 +110,7 @@ def main():
     parser.add_argument('--save_model', type=str, default=None, help='Path to save the pruned model.')
     parser.add_argument('--skip_mlp', action="store_true", default=False)
     parser.add_argument('--skip_attn', action="store_true", default=False)
+    
     args = parser.parse_args()
     
     # Setting seeds for reproducibility
@@ -141,7 +144,7 @@ def main():
     print("use device ", device)
 
     # Prune the model
-    before_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n)
+    before_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n) if not args.is_orig_smol else sum(p.numel() for n, p in model.named_parameters() if 'attn' in n)
     print("pruning starts")
     if args.prune_method == "flap":
         if args.metrics == 'N/A':
@@ -167,6 +170,8 @@ def main():
     if args.eval:
         ppl = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
         print(f"ppl on wikitext {ppl}")
+        ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
+        print(f"ppl on lm_eval_harness {ppl}")
         
     # Save the model
     if args.save_model:
@@ -179,17 +184,19 @@ def main():
             model.save_pretrained_distributed(args.save_model, is_main_process=True, update_config=True)
         else:
             model.save_pretrained(args.save_model)
-        model = get_llm(args.save_model, args.is_mamba, args.is_lm_head, args.split_mamba, args.is_phi, args.is_mamba_in_llama, args.skip_mlp)
+        model = get_llm(args.save_model, args.is_mamba, args.is_lm_head, args.split_mamba, args.is_phi, args.is_mamba_in_llama, args.skip_mlp, strict=False)
 
     print("*" * 30)
     print(f"model parameter post pruning {sum(p.numel() for p in model.parameters()) / 1000 ** 3:.4f}B")
     print("*" * 30)
-    after_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n)
+    after_mixer = sum(p.numel() for n, p in model.named_parameters() if 'mixer' in n) if not args.is_orig_smol else sum(p.numel() for n, p in model.named_parameters() if 'attn' in n)
     print(f"number of mixer parameters after pruning: {after_mixer}, before {before_mixer}")
     print(f"compression ratio mixer: {after_mixer / before_mixer}")
     if args.eval:
         ppl = evaluate_wikitext(model, tokenizer_path=tokenizer_path)
         print(f"ppl on wikitext {ppl}")
+        # ppl = evaluate_with_lm_eval_harness(model, tokenizer_path=tokenizer_path, batch_size=64)
+        # print(f"ppl on lm_eval_harness {ppl}")
         # in_proj_sizes =[l.mixer.in_proj.shape for l in model.backbone.layers]
         # out_proj_sizes =[l.mixer.out_proj.shape for l in model.backbone.layers]
         # print(f"input projection sizes {in_proj_sizes}")

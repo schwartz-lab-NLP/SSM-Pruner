@@ -4,8 +4,9 @@
 #model="goombalab/Phi-Mamba"
 #model="state-spaces/mamba2-2.7b"
 model="schwartz-lab/Smol2-Mamba-1.9B"
-# model="HuggingFaceTB/SmolLM2-1.7B"
+# # model="HuggingFaceTB/SmolLM2-1.7B"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
+model="LLAMBA_1B"
 
 cuda_device=0
 
@@ -15,6 +16,7 @@ export PYTHONPATH=".:$PYTHONPATH"
 export PYTHONPATH="./phi_mamba:$PYTHONPATH"
 export PYTHONPATH="./MambaInLlama:$PYTHONPATH"
 export PYTHONPATH="./wanda:$PYTHONPATH"
+export PYTHONPATH="./edge/cartesia-pytorch:$PYTHONPATH"
 
 # Define function to run python command
 run_python_command () {
@@ -26,9 +28,10 @@ run_python_command () {
     --save $3 \
     --save_model $4 \
     --is_mamba \
-    --is_lm_head 
-    # --is_mamba_in_llama 
+    --is_lm_head \
+    # --is_llamba \
     
+    # --is_mamba_in_llama 
 #    --eval_zero_shot \
 #    --lm_eval_name auto-lm-head
 
@@ -59,7 +62,9 @@ run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_0
 run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_09" "out/mamba/unstructured/wanda/SMOL19_09/model/" 0.9
 
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
-# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_05" "out/mamba/unstructured/wanda/SMOL17_05/model/" 0.5
+# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05/model/" 0.5
+run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025/model/" 0.25
+
 
 
 

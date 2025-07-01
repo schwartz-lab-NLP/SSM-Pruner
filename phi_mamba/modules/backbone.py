@@ -148,3 +148,5 @@ class MixerModel(nn.Module):
         # Last layer, apply layer norm
         outputs["last_hidden_state"] = self.final_layernorm(hidden_states)
         return outputs
+
+

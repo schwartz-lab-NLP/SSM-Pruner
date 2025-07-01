@@ -6,7 +6,7 @@
 model="schwartz-lab/Smol2-Mamba-1.9B"
 # # model="HuggingFaceTB/SmolLM2-1.7B"
 #model="JunxiongWang/Llama3.2-Mamba2-3B-dpo"
-model="LLAMBA_1B"
+# model="LLAMBA_1B"
 
 cuda_device=0
 
@@ -63,7 +63,7 @@ run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL19_0
 
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/SMOL17_025" "out/mamba/unstructured/wanda/SMOL17_025/model/" 0.25
 # run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05" "out/mamba/unstructured/wanda/lm_head_LLAMBA_05/model/" 0.5
-run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025/model/" 0.25
+# run_python_command "wanda" "unstructured" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025" "out/mamba/unstructured/wanda/lm_head_LLAMBA_025/model/" 0.25
 
 
 

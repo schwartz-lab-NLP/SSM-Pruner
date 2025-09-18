@@ -173,6 +173,8 @@ loss = torch.norm(
 ).mean()
 ```
 ## Citation
+🎉 **Update: Our paper has been accepted to EMNLP 2025 Main Conference!** 🎉
+
 If you use this codebase, or otherwise find our work valuable, please cite Phi-Mamba:
 ```
 @article{distill-mohawk,

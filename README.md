@@ -47,6 +47,7 @@ This model was distilled from [SmolLM2-1.7B](https://huggingface.co/HuggingFaceT
 For fine-tuning our pruned models with distillation loss we used [finetune.py](phi_mamba/finetune.py).
 
 ## Citation
+🎉 **Update: Our paper has been accepted to EMNLP 2025 Main Conference!** 🎉
 
 ```bibtex
 @misc{ghattas2025pruningstatespacellms,
